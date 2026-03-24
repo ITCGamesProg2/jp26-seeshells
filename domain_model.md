@@ -93,4 +93,5 @@ classDiagram
     Spit ..|> Movable : is a 
 
     Environment --* Game : has a
+    Obstacle --* Environment : has a
 ```
