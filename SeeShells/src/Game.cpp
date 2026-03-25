@@ -120,6 +120,7 @@ void Game::processKeyPressed(const std::optional<sf::Event>& t_event)
 void Game::update(double dt)
 {
 	m_turtle.update(dt);
+
 }
 
 ////////////////////////////////////////////////////////////

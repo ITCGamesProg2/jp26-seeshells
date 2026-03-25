@@ -36,7 +36,7 @@ void Turtle::move(float t_dt)
 
 	if (m_direction.x != 0 && m_direction.y != 0)
 	{
-		m_direction.normalized();
+		m_direction = m_direction.normalized();
 	}
 	
 

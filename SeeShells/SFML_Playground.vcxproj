@@ -19,11 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Drawable.h" />
+    <ClInclude Include="include\Environment.h" />
     <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\ScreenSize.h" />
     <ClInclude Include="include\Turtle.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Drawable.cpp" />
+    <ClCompile Include="src\Environment.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Turtle.cpp" />
@@ -91,11 +95,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SFML_SDK)\include; .\include; .</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\SFML-3.0.0\include; .\include; .</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SFML_SDK)\lib; .\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\SFML-3.0.0\lib; .\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
