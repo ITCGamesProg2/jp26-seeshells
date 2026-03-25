@@ -12,6 +12,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "ScreenSize.h"
+#include "Turtle.h"
 
 /// <summary>
 /// @author RP
@@ -85,6 +86,8 @@ protected:
 	sf::Font m_arialFont;
 	// main window
 	sf::RenderWindow m_window;
+
+	Turtle m_turtle;
 
 #ifdef TEST_FPS
 	sf::Text x_updateFPS{ m_arialFont };	// text used to display updates per second.
