@@ -16,6 +16,7 @@
 
 #include <iostream>
 #include "Game.h"
+#include "AssetManager.h"
 
 
 /// <summary>
@@ -28,8 +29,11 @@
 /// <returns></returns>
 int main(int, char* argv[])
 {
-	
-	Game game;
+	AssetManager assetManager;
+	assetManager.loadTexture("tiles", "resources/IMAGES/tiles.png");
+	assetManager.loadTexture("player", "resources/IMAGES/player.png");
+
+	Game game(assetManager);
 	game.run();
 }
 

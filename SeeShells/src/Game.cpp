@@ -5,8 +5,9 @@
 static float const FPS{ 60.0f };
 
 ////////////////////////////////////////////////////////////
-Game::Game()	
-	: m_window(sf::VideoMode({ ScreenSize::s_width, ScreenSize::s_height }, 32), "SFML Playground", sf::Style::Default)
+Game::Game(AssetManager& t_assetManager)
+	: m_window(sf::VideoMode({ ScreenSize::s_width, ScreenSize::s_height }, 32), "SFML Playground", sf::Style::Default), 
+	m_turtle(t_assetManager)
 {
 	init();
 }

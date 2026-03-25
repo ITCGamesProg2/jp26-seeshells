@@ -14,6 +14,8 @@
 #include "ScreenSize.h"
 #include "Turtle.h"
 
+#include "AssetManager.h"
+
 /// <summary>
 /// @author RP
 /// @date January 2026
@@ -37,7 +39,7 @@ public:
 	/// @brief Default constructor that initialises the SFML window, 
 	///   and sets vertical sync enabled. 
 	/// </summary>
-	Game();
+	Game(AssetManager& t_manager);
 
 	/// <summary>
 	/// @brief the main game loop.

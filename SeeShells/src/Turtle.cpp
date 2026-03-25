@@ -1,6 +1,8 @@
 #include "Turtle.h"
 
-Turtle::Turtle()
+Turtle::Turtle(AssetManager &t_assetManager)
+	: m_assetManager(t_assetManager), 
+	m_body(t_assetManager.getTexture("player"))
 {
 }
 

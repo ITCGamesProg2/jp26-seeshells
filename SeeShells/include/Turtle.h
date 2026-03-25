@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "AssetManager.h"
 
 class Turtle
 {
@@ -10,14 +11,15 @@ private:
 
 	static int const m_speed{ 100 };
 
-	sf::Texture m_texture{ "./resources/ASSETS/IMAGES/player.png" };
-	sf::Sprite m_body{ m_texture };
+	sf::Sprite m_body;
+
+	AssetManager& m_assetManager;
 
 	void move(float t_dt);
 
 public:
 
-	Turtle();
+	Turtle(AssetManager &t_assetManager);
 
 	//void init();
 	void update(float t_dt);
