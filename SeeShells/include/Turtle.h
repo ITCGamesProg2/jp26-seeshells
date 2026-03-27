@@ -9,7 +9,7 @@ private:
 
 	sf::Vector2f m_direction{ 0,0 };
 
-	static int const m_speed{ 100 };
+	int m_speed{ 100 };
 
 	sf::Sprite m_body;
 

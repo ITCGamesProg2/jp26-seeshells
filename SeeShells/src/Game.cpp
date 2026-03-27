@@ -7,7 +7,7 @@ static float const FPS{ 60.0f };
 ////////////////////////////////////////////////////////////
 Game::Game(AssetManager& t_assetManager)
 	: m_window(sf::VideoMode({ ScreenSize::s_width, ScreenSize::s_height }, 32), "SFML Playground", sf::Style::Default), 
-	m_turtle(t_assetManager)
+	m_turtle(t_assetManager), m_crab(t_assetManager)
 {
 	init();
 }
@@ -121,7 +121,7 @@ void Game::processKeyPressed(const std::optional<sf::Event>& t_event)
 void Game::update(double dt)
 {
 	m_turtle.update(dt);
-
+	m_crab.update(dt);
 }
 
 ////////////////////////////////////////////////////////////
@@ -130,7 +130,7 @@ void Game::render()
 	m_window.clear(sf::Color(0, 0, 0, 0));
 
 	m_turtle.render(m_window);
-
+	m_crab.render(m_window);
 
 #ifdef TEST_FPS
 	m_window.draw(x_updateFPS);

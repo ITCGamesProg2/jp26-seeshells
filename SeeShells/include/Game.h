@@ -92,6 +92,7 @@ protected:
 	sf::RenderWindow m_window;
 
 	Turtle m_turtle;
+	Crab m_crab;
 
 #ifdef TEST_FPS
 	sf::Text x_updateFPS{ m_arialFont };	// text used to display updates per second.
