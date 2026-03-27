@@ -13,6 +13,8 @@
 #include <string>
 #include "ScreenSize.h"
 #include "Turtle.h"
+#include "Crab.h"
+#include "Bird.h"
 
 #include "AssetManager.h"
 
