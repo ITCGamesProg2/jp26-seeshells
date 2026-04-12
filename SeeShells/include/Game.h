@@ -15,6 +15,7 @@
 #include "Turtle.h"
 #include "Crab.h"
 #include "Bird.h"
+#include "Environment.h"
 
 #include "AssetManager.h"
 
@@ -90,6 +91,8 @@ protected:
 	sf::Font m_arialFont;
 	// main window
 	sf::RenderWindow m_window;
+
+	Environment m_environment;
 
 	Turtle m_turtle;
 	Crab m_crab;

@@ -7,7 +7,7 @@ static float const FPS{ 60.0f };
 ////////////////////////////////////////////////////////////
 Game::Game(AssetManager& t_assetManager)
 	: m_window(sf::VideoMode({ ScreenSize::s_width, ScreenSize::s_height }, 32), "SFML Playground", sf::Style::Default), 
-	m_turtle(t_assetManager), m_crab(t_assetManager)
+	m_turtle(t_assetManager), m_crab(t_assetManager), m_environment(t_assetManager)
 {
 	init();
 }
@@ -22,6 +22,8 @@ void Game::init()
 	{
 		std::cerr << "Error loading font file";
 	}
+
+	m_environment.generateObstacles();
 
 #ifdef TEST_FPS
 	x_updateFPS.setFont(m_arialFont);
@@ -131,6 +133,8 @@ void Game::render()
 
 	m_turtle.render(m_window);
 	m_crab.render(m_window);
+
+	m_environment.render(m_window);
 
 #ifdef TEST_FPS
 	m_window.draw(x_updateFPS);
