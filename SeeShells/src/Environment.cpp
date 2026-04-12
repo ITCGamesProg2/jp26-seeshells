@@ -7,14 +7,9 @@ Environment::Environment(AssetManager& t_assetManager)
 
 void Environment::render(sf::RenderWindow& t_window)
 {
-	for (int index = 0; index < MAX_BRANCHES; index++)
+	for (int index = 0; index < MAX_OBSTACLES; index++)
 	{
 		t_window.draw(m_branches[index]);
-	}
-
-	for (int index = 0; index < MAX_ROCKS; index++)
-	{
-		t_window.draw(m_rocks[index]);
 	}
 }
 
@@ -22,37 +17,35 @@ void Environment::render(sf::RenderWindow& t_window)
 
 void Environment::generateObstacles()
 {
-	sf::Texture const& texture = m_assetManager.getTexture("tiles");
+	sf::Texture const& texture = m_assetManager.getTexture("obstacles");
 
-	for (int index = 0; index < MAX_BRANCHES; index++)
+	for (int index = 0; index < MAX_OBSTACLES; index++)
 	{
 		sf::Sprite sprite(texture);
+
+		// Randomly decide obstace type
+		int type = rand() % 4;
+		switch (type)
+		{
+		case 0:
+			sprite.setTextureRect(sf::IntRect({0,0}, {32,32}));
+			break;
+		case 1:
+			sprite.setTextureRect(sf::IntRect({ 32,0 }, { 32,32 }));
+			break;
+		case 2:
+			sprite.setTextureRect(sf::IntRect({ 0,32 }, { 32,32 }));
+			break;
+		case 3:
+			sprite.setTextureRect(sf::IntRect({ 32,32 }, { 32,32 }));
+			break;
+		}
+
+		
 		sprite.setPosition({rand() % 1000 + 200.0f, rand()% 700 + 50.0f});
 		m_branches.push_back(sprite);
 
-		int cellID_TL = floor(sprite.getPosition().x / cellWidth) +
-			(floor(sprite.getPosition().y / cellHeight) * numCols);
-		int cellID_TR = floor((sprite.getPosition().x + sprite.getTexture().getSize().x) / cellWidth) +
-			(floor(sprite.getPosition().y / cellHeight) * numCols);
-
-		int cellID_BL = floor(sprite.getPosition().x / cellWidth) +
-			(floor((sprite.getPosition().y + sprite.getTexture().getSize().y) / cellHeight) * numCols);
-		int cellID_BR = floor((sprite.getPosition().x + sprite.getTexture().getSize().x) / cellWidth) +
-			(floor((sprite.getPosition().y + sprite.getTexture().getSize().y) / cellHeight) * numCols);
-
-		// Usage: insert a new map entry
-		spatialMap[cellID_TL].push_back(sprite);
-		spatialMap[cellID_TR].push_back(sprite);
-		spatialMap[cellID_BL].push_back(sprite);
-		spatialMap[cellID_BR].push_back(sprite);
-	}
-
-	for (int index = 0; index < MAX_ROCKS; index++)
-	{
-		sf::Sprite sprite(texture);
-		sprite.setPosition({ rand() % 1000 + 200.0f, rand() % 700 + 50.0f });
-		m_rocks.push_back(sprite);
-
+		//Update spatial Map with this entry of obstacle 
 		int cellID_TL = floor(sprite.getPosition().x / cellWidth) +
 			(floor(sprite.getPosition().y / cellHeight) * numCols);
 		int cellID_TR = floor((sprite.getPosition().x + sprite.getTexture().getSize().x) / cellWidth) +
@@ -74,7 +67,7 @@ void Environment::generateObstacles()
 bool Environment::collision(sf::Sprite t_sprite)
 {
 
-	// Calculating cell ID of each corner of plyer
+	// Calculating cell ID of each corner of plyer (?or opponent if need be?)
 	int cellID_TL = floor(t_sprite.getPosition().x / cellWidth) +
 		(floor(t_sprite.getPosition().y / cellHeight) * numCols);
 

@@ -6,8 +6,9 @@
 #include <map> 
 #include <list>
 
-#define MAX_BRANCHES	10
-#define MAX_ROCKS		10
+#define MAX_OBSTACLES	20
+
+
 static int const numCols{ 10 };
 static int const numRows{ 10 };
 static int const cellWidth{ 64 };
@@ -19,11 +20,9 @@ private:
 
 	AssetManager& m_assetManager;
 
-	// Texture
-	sf::Texture m_blankTexture{ "resources/IMAGES/temp.png" };
-
 	std::vector<sf::Sprite> m_rocks;
 	std::vector<sf::Sprite> m_branches;
+	
 	// Need to #include <map> and #include <list>
 	// Declaration of std::map
 	std::map<int, std::list<sf::Sprite>> spatialMap;
@@ -39,6 +38,14 @@ public:
 	///  </summary> 
 	void generateObstacles();
 
+
+	/// <summary>
+	/// Function that checks which tile the t_sprite is in, then checks if any obstacles in that same tile.
+	/// If there is, then collision is checked only with those obstalces. Each corner is checked for the
+	/// respective tile location due to the possibility that t_sprite could span multiple tiles.
+	/// </summary>
+	/// <param name="t_sprite"></param>
+	/// <returns></returns>
 	bool collision(sf::Sprite t_sprite);
 
 
