@@ -33,6 +33,7 @@ int main(int, char* argv[])
 	assetManager.loadTexture("tiles", "resources/IMAGES/tiles.png");
 	assetManager.loadTexture("player", "resources/IMAGES/player.png");
 	assetManager.loadTexture("crab", "resources/IMAGES/crab.png");
+	assetManager.loadTexture("bird", "resources/IMAGES/bird.png");
 
 	Game game(assetManager);
 	game.run();

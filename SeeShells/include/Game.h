@@ -93,6 +93,7 @@ protected:
 
 	Turtle m_turtle;
 	Crab m_crab;
+	Bird m_bird;
 
 #ifdef TEST_FPS
 	sf::Text x_updateFPS{ m_arialFont };	// text used to display updates per second.

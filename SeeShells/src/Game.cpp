@@ -7,7 +7,9 @@ static float const FPS{ 60.0f };
 ////////////////////////////////////////////////////////////
 Game::Game(AssetManager& t_assetManager)
 	: m_window(sf::VideoMode({ ScreenSize::s_width, ScreenSize::s_height }, 32), "SFML Playground", sf::Style::Default), 
-	m_turtle(t_assetManager), m_crab(t_assetManager)
+	m_turtle(t_assetManager), 
+	m_crab(t_assetManager), 
+	m_bird(t_assetManager, {400.0f, 400.0f})
 {
 	init();
 }
@@ -122,6 +124,7 @@ void Game::update(double dt)
 {
 	m_turtle.update(dt);
 	m_crab.update(dt);
+	m_bird.update(dt);
 }
 
 ////////////////////////////////////////////////////////////
@@ -131,6 +134,7 @@ void Game::render()
 
 	m_turtle.render(m_window);
 	m_crab.render(m_window);
+	m_bird.render(m_window);
 
 #ifdef TEST_FPS
 	m_window.draw(x_updateFPS);
