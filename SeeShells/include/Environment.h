@@ -39,6 +39,8 @@ public:
 	///  </summary> 
 	void generateObstacles();
 
+	bool collision(sf::Sprite t_sprite);
+
 
 	void render(sf::RenderWindow& t_window);
 

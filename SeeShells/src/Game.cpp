@@ -124,6 +124,11 @@ void Game::update(double dt)
 {
 	m_turtle.update(dt);
 	m_crab.update(dt);
+
+	if (m_environment.collision(m_turtle.getSprite()))
+	{
+		std::cout << "COLLIDED!!!!\n";
+	}
 }
 
 ////////////////////////////////////////////////////////////

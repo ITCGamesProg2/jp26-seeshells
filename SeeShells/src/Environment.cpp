@@ -71,3 +71,62 @@ void Environment::generateObstacles()
 	}
 }
 
+bool Environment::collision(sf::Sprite t_sprite)
+{
+
+	// Calculating cell ID of each corner of plyer
+	int cellID_TL = floor(t_sprite.getPosition().x / cellWidth) +
+		(floor(t_sprite.getPosition().y / cellHeight) * numCols);
+
+
+	int cellID_TR = floor((t_sprite.getPosition().x + t_sprite.getTexture().getSize().x) / cellWidth) +
+		(floor(t_sprite.getPosition().y / cellHeight) * numCols);
+
+	int cellID_BL = floor(t_sprite.getPosition().x / cellWidth) +
+		(floor((t_sprite.getPosition().y + t_sprite.getTexture().getSize().y) / cellHeight) * numCols);
+
+
+	int cellID_BR = floor((t_sprite.getPosition().x + t_sprite.getTexture().getSize().x) / cellWidth) +
+		(floor((t_sprite.getPosition().y + t_sprite.getTexture().getSize().y) / cellHeight) * numCols);
+
+
+	std::list<sf::Sprite>& obstacles_TL = spatialMap[cellID_TL];
+	std::list<sf::Sprite>& obstacles_TR = spatialMap[cellID_TR];
+	std::list<sf::Sprite>& obstacles_BL = spatialMap[cellID_BL];
+	std::list<sf::Sprite>& obstacles_BR = spatialMap[cellID_BR];
+
+	for (auto& obstacle : obstacles_TL)
+	{
+		if (obstacle.getGlobalBounds().findIntersection(t_sprite.getGlobalBounds()))
+		{
+			return true;
+		}
+	}
+
+	for (auto& obstacle : obstacles_TR)
+	{
+		if (obstacle.getGlobalBounds().findIntersection(t_sprite.getGlobalBounds()))
+		{
+			return true;
+		}
+	}
+
+	for (auto& obstacle : obstacles_BL)
+	{
+		if (obstacle.getGlobalBounds().findIntersection(t_sprite.getGlobalBounds()))
+		{
+			return true;
+		}
+	}
+
+	for (auto& obstacle : obstacles_BR)
+	{
+		if (obstacle.getGlobalBounds().findIntersection(t_sprite.getGlobalBounds()))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+

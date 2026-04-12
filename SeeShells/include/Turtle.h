@@ -26,5 +26,7 @@ public:
 
 	void render(sf::RenderWindow& t_window);
 
+	sf::Sprite getSprite();
+
 };
 
