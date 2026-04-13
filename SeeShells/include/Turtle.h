@@ -3,6 +3,12 @@
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
 
+struct Scent
+{
+	sf::CircleShape m_circle;
+	sf::Clock m_timer;
+};
+
 class Turtle
 {
 private:
@@ -17,6 +23,9 @@ private:
 
 	void move(float t_dt);
 
+	std::vector<Scent> m_scentTrail;
+	sf::Clock m_scentTimer;
+
 public:
 
 	Turtle(AssetManager &t_assetManager);
@@ -25,6 +34,8 @@ public:
 	void update(float t_dt);
 
 	void render(sf::RenderWindow& t_window);
+
+	void manageScent();
 
 };
 
