@@ -23,7 +23,7 @@ void Game::init()
 		std::cerr << "Error loading font file";
 	}
 
-	m_environment.generateObstacles();
+	m_environment.generateObstacles(m_spatialMap);
 
 #ifdef TEST_FPS
 	x_updateFPS.setFont(m_arialFont);
@@ -125,7 +125,7 @@ void Game::update(double dt)
 	m_turtle.update(dt);
 	m_crab.update(dt);
 
-	if (m_environment.collision(m_turtle.getSprite()))
+	if (m_environment.collision(m_turtle.getSprite(), m_spatialMap))
 	{
 		std::cout << "COLLIDED!!!!\n";
 	}

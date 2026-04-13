@@ -11,6 +11,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <map> 
+#include <list>
+
 #include "ScreenSize.h"
 #include "Turtle.h"
 #include "Crab.h"
@@ -34,7 +37,6 @@
 ///		Game game;
 ///		game.run();
 /// </summary>
-
 class Game
 {
 public:
@@ -86,6 +88,11 @@ protected:
 	/// </summary>
 	/// <param name="t_event">key pressed event</param>
 	void processKeyPressed(const std::optional<sf::Event>& t_event);
+
+
+	// Need to #include <map> and #include <list>
+	// Declaration of std::map
+	std::map<int, std::list<sf::Sprite>> m_spatialMap;
 
 	// Font used for all text
 	sf::Font m_arialFont;

@@ -15,7 +15,7 @@ void Environment::render(sf::RenderWindow& t_window)
 
 
 
-void Environment::generateObstacles()
+void Environment::generateObstacles(std::map<int, std::list<sf::Sprite>>& t_spatialMap)
 {
 	sf::Texture const& texture = m_assetManager.getTexture("obstacles");
 
@@ -57,14 +57,14 @@ void Environment::generateObstacles()
 			(floor((sprite.getPosition().y + sprite.getTexture().getSize().y) / cellHeight) * numCols);
 
 		// Usage: insert a new map entry
-		spatialMap[cellID_TL].push_back(sprite);
-		spatialMap[cellID_TR].push_back(sprite);
-		spatialMap[cellID_BL].push_back(sprite);
-		spatialMap[cellID_BR].push_back(sprite);
+		t_spatialMap[cellID_TL].push_back(sprite);
+		t_spatialMap[cellID_TR].push_back(sprite);
+		t_spatialMap[cellID_BL].push_back(sprite);
+		t_spatialMap[cellID_BR].push_back(sprite);
 	}
 }
 
-bool Environment::collision(sf::Sprite t_sprite)
+bool Environment::collision(sf::Sprite t_sprite, std::map<int, std::list<sf::Sprite>>& t_spatialMap)
 {
 
 	// Calculating cell ID of each corner of plyer (?or opponent if need be?)
@@ -83,10 +83,10 @@ bool Environment::collision(sf::Sprite t_sprite)
 		(floor((t_sprite.getPosition().y + t_sprite.getTexture().getSize().y) / cellHeight) * numCols);
 
 
-	std::list<sf::Sprite>& obstacles_TL = spatialMap[cellID_TL];
-	std::list<sf::Sprite>& obstacles_TR = spatialMap[cellID_TR];
-	std::list<sf::Sprite>& obstacles_BL = spatialMap[cellID_BL];
-	std::list<sf::Sprite>& obstacles_BR = spatialMap[cellID_BR];
+	std::list<sf::Sprite>& obstacles_TL = t_spatialMap[cellID_TL];
+	std::list<sf::Sprite>& obstacles_TR = t_spatialMap[cellID_TR];
+	std::list<sf::Sprite>& obstacles_BL = t_spatialMap[cellID_BL];
+	std::list<sf::Sprite>& obstacles_BR = t_spatialMap[cellID_BR];
 
 	for (auto& obstacle : obstacles_TL)
 	{

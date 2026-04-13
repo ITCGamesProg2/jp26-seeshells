@@ -22,10 +22,6 @@ private:
 
 	std::vector<sf::Sprite> m_rocks;
 	std::vector<sf::Sprite> m_branches;
-	
-	// Need to #include <map> and #include <list>
-	// Declaration of std::map
-	std::map<int, std::list<sf::Sprite>> spatialMap;
 
 public:
 
@@ -36,7 +32,7 @@ public:
 	/// storing copies (instead of pointers to sf::Sprite) in std::vector 
 	/// is acceptable. 
 	///  </summary> 
-	void generateObstacles();
+	void generateObstacles(std::map<int, std::list<sf::Sprite>> &t_spatialMap);
 
 
 	/// <summary>
@@ -46,7 +42,7 @@ public:
 	/// </summary>
 	/// <param name="t_sprite"></param>
 	/// <returns></returns>
-	bool collision(sf::Sprite t_sprite);
+	bool collision(sf::Sprite t_sprite, std::map<int, std::list<sf::Sprite>>& t_spatialMap);
 
 
 	void render(sf::RenderWindow& t_window);
