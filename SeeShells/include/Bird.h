@@ -3,6 +3,14 @@
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
 
+enum class BirdState
+{
+	SEARCHING,
+	ALERT,
+	PURSUING,
+	ATTACKING
+};
+
 class Bird
 {
 public:
@@ -18,5 +26,6 @@ private:
 	float m_radius = 200.0f;
 	float m_angle;
 	float m_speed = 0.5f;
+	BirdState m_state = BirdState::SEARCHING;
 };
 

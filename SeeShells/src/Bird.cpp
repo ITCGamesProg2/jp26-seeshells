@@ -24,9 +24,27 @@ sf::VertexArray Bird::visionCone()
 {
 	sf::Vector2f spritePos = m_body.getPosition();
 	sf::VertexArray visionCone(sf::PrimitiveType::TriangleFan, 12);
+	sf::Color coneColor;
+	
+	switch (m_state)
+	{
+	case BirdState::SEARCHING:
+		coneColor = sf::Color(0, 255, 0, 50);
+		break;
+	case BirdState::ALERT:
+		coneColor = sf::Color(255, 255, 0, 50);
+	case BirdState::PURSUING:
+		coneColor = sf::Color(255, 165, 0, 50);
+		break;
+	case BirdState::ATTACKING:
+		coneColor = sf::Color(255, 0, 0, 50);
+		break;
+	default:
+		break;
+	}
 
 	visionCone[0].position = { spritePos.x, spritePos.y };
-	visionCone[0].color = sf::Color(255,255,255,50);
+	visionCone[0].color = coneColor;
 
 	for (int i = 1; i < 12; i++)
 	{
@@ -36,8 +54,8 @@ sf::VertexArray Bird::visionCone()
 
 		float radAngle = totalAngle * (3.14159f / 180.f);
 
-		visionCone[i].position = { spritePos.x + std::cos(radAngle) * 100, spritePos.x + std::sin(radAngle) * 100 };
-		visionCone[i].color = sf::Color(255, 255, 255, 50);
+		visionCone[i].position = { spritePos.x + std::cos(radAngle) * 100, spritePos.y + std::sin(radAngle) * 100 };
+		visionCone[i].color = coneColor;
 	}
 
 	return visionCone;
@@ -50,7 +68,7 @@ void Bird::move(float dt)
 		m_angle = 0.0f;
 	}
 	sf::Vector2f newPos;
-	m_angle += m_speed * dt/1000;
+	m_angle += (m_speed * dt/1000);
 
 	newPos.x = m_center.x + m_radius * std::cos(m_angle);
 	newPos.y = m_center.y + m_radius * std::sin(m_angle);
