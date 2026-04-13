@@ -9,14 +9,15 @@
 #define MAX_OBSTACLES	20
 
 
-static int const numCols{ 10 };
-static int const numRows{ 10 };
-static int const cellWidth{ 64 };
-static int const cellHeight{ 64 };
 
 class Environment
 {
 private:
+
+	static int const numCols{ 10 };
+	static int const numRows{ 10 };
+	static int const cellWidth{ 64 };
+	static int const cellHeight{ 64 };
 
 	AssetManager& m_assetManager;
 

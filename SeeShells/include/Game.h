@@ -71,6 +71,24 @@ protected:
 	void update(double dt);
 
 	/// <summary>
+	/// Function encapsulating ALL collision checks
+	/// </summary>
+	bool checkCollision();
+
+	/// <summary>
+	/// Function to check collision with env for an entity
+	/// </summary>
+	bool Game::environmentCollision(
+		sf::Sprite t_entity,
+		std::list<sf::Sprite>& t_obstacles_TL,
+		std::list<sf::Sprite>& t_obstacles_BL,
+		std::list<sf::Sprite>& t_obstacles_TR,
+		std::list<sf::Sprite>& t_obstacles_BR
+	);
+
+
+
+	/// <summary>
 	/// @brief Draws the background and foreground game objects in the SFML window.
 	/// The render window is always cleared to black before anything is drawn.
 	/// </summary>
@@ -88,6 +106,11 @@ protected:
 	/// </summary>
 	/// <param name="t_event">key pressed event</param>
 	void processKeyPressed(const std::optional<sf::Event>& t_event);
+
+	static int const numCols{ 10 };
+	static int const numRows{ 10 };
+	static int const cellWidth{ 64 };
+	static int const cellHeight{ 64 };
 
 
 	// Need to #include <map> and #include <list>

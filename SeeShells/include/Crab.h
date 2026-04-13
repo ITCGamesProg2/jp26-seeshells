@@ -4,9 +4,15 @@
 #include "AssetManager.h"
 
 
+
 class Crab
 {
 private:
+
+	static int const numCols{ 10 };
+	static int const numRows{ 10 };
+	static int const cellWidth{ 64 };
+	static int const cellHeight{ 64 };
 
 	bool m_goingLeft{ false };
 
@@ -23,12 +29,16 @@ private:
 
 public:
 
-	Crab(AssetManager& t_assetManager);
+	Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t_spatialMap);
 
-	//void init();
-	void update(float t_dt);
+	void updateSpatialMap(std::map<int, std::list<sf::Sprite>>& t_spatialMap);
+
+	void update(float t_dt, std::map<int, std::list<sf::Sprite>>& t_spatialMap);
+
+	bool collision(sf::Sprite t_sprite, std::map<int, std::list<sf::Sprite>>& t_spatialMap);
 
 	void render(sf::RenderWindow& t_window);
 
+	sf::Sprite getSprite();
 };
 
