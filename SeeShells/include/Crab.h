@@ -31,11 +31,9 @@ public:
 
 	Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t_spatialMap);
 
+	void update(float t_dt);
+
 	void updateSpatialMap(std::map<int, std::list<sf::Sprite>>& t_spatialMap);
-
-	void update(float t_dt, std::map<int, std::list<sf::Sprite>>& t_spatialMap);
-
-	bool collision(sf::Sprite t_sprite, std::map<int, std::list<sf::Sprite>>& t_spatialMap);
 
 	void render(sf::RenderWindow& t_window);
 

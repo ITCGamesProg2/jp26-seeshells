@@ -15,7 +15,7 @@ void Environment::render(sf::RenderWindow& t_window)
 
 
 
-void Environment::generateObstacles(std::map<int, std::list<sf::Sprite>>& t_spatialMap)
+void Environment::generateObstacles()
 {
 	sf::Texture const& texture = m_assetManager.getTexture("obstacles");
 
@@ -57,11 +57,62 @@ void Environment::generateObstacles(std::map<int, std::list<sf::Sprite>>& t_spat
 			(floor((sprite.getPosition().y + sprite.getTexture().getSize().y) / cellHeight) * numCols);
 
 		// Usage: insert a new map entry
-		t_spatialMap[cellID_TL].push_back(sprite);
-		t_spatialMap[cellID_TR].push_back(sprite);
-		t_spatialMap[cellID_BL].push_back(sprite);
-		t_spatialMap[cellID_BR].push_back(sprite);
+		m_spatialMap[cellID_TL].push_back(sprite);
+		m_spatialMap[cellID_TR].push_back(sprite);
+		m_spatialMap[cellID_BL].push_back(sprite);
+		m_spatialMap[cellID_BR].push_back(sprite);
 	}
 }
 
 
+bool Environment::entityCollison(sf::Sprite t_entity)
+{
+	int cellID_TL = floor(t_entity.getPosition().x / cellWidth) +
+		(floor(t_entity.getPosition().y / cellHeight) * numCols);
+	int cellID_TR = floor((t_entity.getPosition().x + t_entity.getTexture().getSize().x) / cellWidth) +
+		(floor(t_entity.getPosition().y / cellHeight) * numCols);
+	int cellID_BL = floor(t_entity.getPosition().x / cellWidth) +
+		(floor((t_entity.getPosition().y + t_entity.getTexture().getSize().y) / cellHeight) * numCols);
+	int cellID_BR = floor((t_entity.getPosition().x + t_entity.getTexture().getSize().x) / cellWidth) +
+		(floor((t_entity.getPosition().y + t_entity.getTexture().getSize().y) / cellHeight) * numCols);
+
+	std::list<sf::Sprite>& entity_TL = m_spatialMap[cellID_TL];
+	std::list<sf::Sprite>& entity_TR = m_spatialMap[cellID_TR];
+	std::list<sf::Sprite>& entity_BL = m_spatialMap[cellID_BL];
+	std::list<sf::Sprite>& entity_BR = m_spatialMap[cellID_BR];
+
+
+	for (auto& obstacle : entity_TL)
+	{
+		if (obstacle.getGlobalBounds().findIntersection(t_entity.getGlobalBounds()))
+		{
+			return true;
+		}
+	}
+
+	for (auto& obstacle : entity_TR)
+	{
+		if (obstacle.getGlobalBounds().findIntersection(t_entity.getGlobalBounds()))
+		{
+			return true;
+		}
+	}
+
+	for (auto& obstacle : entity_BL)
+	{
+		if (obstacle.getGlobalBounds().findIntersection(t_entity.getGlobalBounds()))
+		{
+			return true;
+		}
+	}
+
+	for (auto& obstacle : entity_BR)
+	{
+		if (obstacle.getGlobalBounds().findIntersection(t_entity.getGlobalBounds()))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}

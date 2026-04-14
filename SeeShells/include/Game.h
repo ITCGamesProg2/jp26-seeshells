@@ -73,20 +73,21 @@ protected:
 	/// <summary>
 	/// Function encapsulating ALL collision checks
 	/// </summary>
-	bool checkCollision();
+	void checkCollision();
+
 
 	/// <summary>
-	/// Function to check collision with env for an entity
+	/// Checking collision between player and all entities
 	/// </summary>
-	bool Game::environmentCollision(
-		sf::Sprite t_entity,
-		std::list<sf::Sprite>& t_obstacles_TL,
-		std::list<sf::Sprite>& t_obstacles_BL,
-		std::list<sf::Sprite>& t_obstacles_TR,
-		std::list<sf::Sprite>& t_obstacles_BR
-	);
+	/// <returns></returns>
+	bool entityCollision();
 
-
+	/// <summary>
+	/// Update the spatial map for all moving entities.
+	/// So essentially, clear the map to get rid of old tile correspondence.
+	/// Then update the tile again with new pos.
+	/// </summary>
+	void updateSpatialMap();
 
 	/// <summary>
 	/// @brief Draws the background and foreground game objects in the SFML window.

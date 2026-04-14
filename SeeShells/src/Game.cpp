@@ -23,7 +23,7 @@ void Game::init()
 		std::cerr << "Error loading font file";
 	}
 
-	m_environment.generateObstacles(m_spatialMap);
+	m_environment.generateObstacles();
 
 #ifdef TEST_FPS
 	x_updateFPS.setFont(m_arialFont);
@@ -123,102 +123,92 @@ void Game::processKeyPressed(const std::optional<sf::Event>& t_event)
 void Game::update(double dt)
 {
 	m_turtle.update(dt);
-	m_crab.update(dt, m_spatialMap);
+	m_crab.update(dt);
 
-
+	updateSpatialMap();
 	checkCollision();
 
 }
 
 
+void Game::updateSpatialMap()
+{
+	m_spatialMap.clear();
+
+	m_crab.updateSpatialMap(m_spatialMap);
+}
+
+
 
 ////////////////////////////////////////////////////////////
-bool Game::checkCollision()
+void Game::checkCollision()
 {
 	sf::Sprite playa = m_turtle.getSprite();
-
-	// Calculating cell ID of each corner of plyer (?or opponent if need be?)
-	int playaID_TL = floor(playa.getPosition().x / cellWidth) +
-		(floor(playa.getPosition().y / cellHeight) * numCols);
-	int playaID_TR = floor((playa.getPosition().x + playa.getTexture().getSize().x) / cellWidth) +
-		(floor(playa.getPosition().y / cellHeight) * numCols);
-	int playaID_BL = floor(playa.getPosition().x / cellWidth) +
-		(floor((playa.getPosition().y + playa.getTexture().getSize().y) / cellHeight) * numCols);
-	int playaID_BR = floor((playa.getPosition().x + playa.getTexture().getSize().x) / cellWidth) +
-		(floor((playa.getPosition().y + playa.getTexture().getSize().y) / cellHeight) * numCols);
-
-	std::list<sf::Sprite>& playa_TL = m_spatialMap[playaID_TL];
-	std::list<sf::Sprite>& playa_TR = m_spatialMap[playaID_TR];
-	std::list<sf::Sprite>& playa_BL = m_spatialMap[playaID_BL];
-	std::list<sf::Sprite>& playa_BR = m_spatialMap[playaID_BR];
-
-
-	if (environmentCollision(playa, playa_TL, playa_BL, playa_TR, playa_TL))
+	if (m_environment.entityCollison(playa))
 	{
 		std::cout << "Player collided with tile\n";
 	}
 
-	sf::Sprite crabby = m_crab.getSprite();
-
-	// Calculating cell ID of each corner of plyer (?or opponent if need be?)
-	int crabbyID_TL = floor(crabby.getPosition().x / cellWidth) +
-		(floor(crabby.getPosition().y / cellHeight) * numCols);
-	int crabbyID_TR = floor((crabby.getPosition().x + crabby.getTexture().getSize().x) / cellWidth) +
-		(floor(crabby.getPosition().y / cellHeight) * numCols);
-	int crabbyID_BL = floor(crabby.getPosition().x / cellWidth) +
-		(floor((crabby.getPosition().y + crabby.getTexture().getSize().y) / cellHeight) * numCols);
-	int crabbyID_BR = floor((crabby.getPosition().x + crabby.getTexture().getSize().x) / cellWidth) +
-		(floor((crabby.getPosition().y + crabby.getTexture().getSize().y) / cellHeight) * numCols);
-
-	std::list<sf::Sprite>& crabby_TL = m_spatialMap[crabbyID_TL];
-	std::list<sf::Sprite>& crabby_TR = m_spatialMap[crabbyID_TR];
-	std::list<sf::Sprite>& crabby_BL = m_spatialMap[crabbyID_BL];
-	std::list<sf::Sprite>& crabby_BR = m_spatialMap[crabbyID_BR];
-
-	if (environmentCollision(crabby, crabby_TL, crabby_TR, crabby_BL, crabby_BR))
+	if (entityCollision())
 	{
-		std::cout << "Crab collided with environment\n";
+		std::cout << "playa on crabby violence\n";
 	}
 
-
-	if (playerCrabCollision(playa, playa_TL, playa_BL, playa_TR, playa_TL))
-
-	return false;
+	sf::Sprite crabby = m_crab.getSprite();
+	if (m_environment.entityCollison(crabby))
+	{
+		std::cout << "crabby collided with tile\n";
+	}
 }
 
-////////////////////////////////////////////////////////////
-bool Game::environmentCollision(sf::Sprite t_entity, std::list<sf::Sprite>& t_obstacles_TL, 
-								std::list<sf::Sprite>& t_obstacles_BL,
-								std::list<sf::Sprite>& t_obstacles_TR,
-								std::list<sf::Sprite>& t_obstacles_BR)
+bool Game::entityCollision()
 {
-	for (auto& obstacle : t_obstacles_TL)
+	sf::Sprite playa = m_turtle.getSprite();
+
+	float posX = playa.getPosition().x;
+	float posY = playa.getPosition().y;
+	float length = playa.getTextureRect().size.x;
+	float height = playa.getTextureRect().size.y;
+
+
+	int cellID_TL = floor(posX / cellWidth) + (floor(posY / cellHeight) * numCols);
+	int cellID_TR = floor((posX + length) / cellWidth) + (floor(posY / cellHeight) * numCols);
+	int cellID_BL = floor(posX / cellWidth) + (floor((posY + height) / cellHeight) * numCols);
+	int cellID_BR = floor((posX + length) / cellWidth) + (floor((posY + height) / cellHeight) * numCols);
+
+	std::list<sf::Sprite>& entity_TL = m_spatialMap[cellID_TL];
+	std::list<sf::Sprite>& entity_TR = m_spatialMap[cellID_TR];
+	std::list<sf::Sprite>& entity_BL = m_spatialMap[cellID_BL];
+	std::list<sf::Sprite>& entity_BR = m_spatialMap[cellID_BR];
+
+
+	for (auto& obstacle : entity_TL)
 	{
-		if (obstacle.getGlobalBounds().findIntersection(t_entity.getGlobalBounds()))
+		if (obstacle.getGlobalBounds().findIntersection(playa.getGlobalBounds()))
 		{
 			return true;
 		}
 	}
 
-	for (auto& obstacle : t_obstacles_TR)
+	for (auto& obstacle : entity_TR)
 	{
-		if (obstacle.getGlobalBounds().findIntersection(t_entity.getGlobalBounds()))
+		if (obstacle.getGlobalBounds().findIntersection(playa.getGlobalBounds()))
 		{
 			return true;
 		}
 	}
 
-	for (auto& obstacle : t_obstacles_BL)
+	for (auto& obstacle : entity_BL)
 	{
-		if (obstacle.getGlobalBounds().findIntersection(t_entity.getGlobalBounds()))
+		if (obstacle.getGlobalBounds().findIntersection(playa.getGlobalBounds()))
 		{
 			return true;
 		}
 	}
 
-	for (auto& obstacle : t_obstacles_BR)
+	for (auto& obstacle : entity_BR)
 	{
-		if (obstacle.getGlobalBounds().findIntersection(t_entity.getGlobalBounds()))
+		if (obstacle.getGlobalBounds().findIntersection(playa.getGlobalBounds()))
 		{
 			return true;
 		}

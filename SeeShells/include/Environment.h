@@ -21,6 +21,10 @@ private:
 
 	AssetManager& m_assetManager;
 
+	// Need to #include <map> and #include <list>
+	// Declaration of std::map
+	std::map<int, std::list<sf::Sprite>> m_spatialMap;
+
 	std::vector<sf::Sprite> m_rocks;
 	std::vector<sf::Sprite> m_branches;
 
@@ -33,17 +37,17 @@ public:
 	/// storing copies (instead of pointers to sf::Sprite) in std::vector 
 	/// is acceptable. 
 	///  </summary> 
-	void generateObstacles(std::map<int, std::list<sf::Sprite>> &t_spatialMap);
+	void generateObstacles();
 
 
 	/// <summary>
-	/// Function that checks which tile the t_sprite is in, then checks if any obstacles in that same tile.
+	/// Function that checks which tile the t_entity is in, then checks if any obstacles in that same tile.
 	/// If there is, then collision is checked only with those obstalces. Each corner is checked for the
-	/// respective tile location due to the possibility that t_sprite could span multiple tiles.
+	/// respective tile location due to the possibility that t_entity could span multiple tiles.
 	/// </summary>
 	/// <param name="t_sprite"></param>
 	/// <returns></returns>
-	bool collision(sf::Sprite t_sprite, std::map<int, std::list<sf::Sprite>>& t_spatialMap);
+	bool entityCollison(sf::Sprite t_entity);
 
 
 	void render(sf::RenderWindow& t_window);

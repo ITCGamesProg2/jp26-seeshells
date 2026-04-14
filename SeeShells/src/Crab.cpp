@@ -5,38 +5,32 @@ Crab::Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t
 	m_body(t_assetManager.getTexture("crab")), m_moveDelay(5)
 {
 	m_body.setPosition({ 100,100 });
-	//updateSpatialMap(t_spatialMap);
+	updateSpatialMap(t_spatialMap);
+}
+
+void Crab::update(float t_dt)
+{
+	move(t_dt);
 }
 
 void Crab::updateSpatialMap(std::map<int, std::list<sf::Sprite>>& t_spatialMap)
 {
-	//Update spatial Map with this entry of obstacle 
-	int cellID_TL = floor(m_body.getPosition().x / cellWidth) +
-		(floor(m_body.getPosition().y / cellHeight) * numCols);
-	int cellID_TR = floor((m_body.getPosition().x + m_body.getTexture().getSize().x) / cellWidth) +
-		(floor(m_body.getPosition().y / cellHeight) * numCols);
+	float posX = m_body.getPosition().x;
+	float posY = m_body.getPosition().y;
+	float length = m_body.getTextureRect().size.x;
+	float height = m_body.getTextureRect().size.y;
 
-	int cellID_BL = floor(m_body.getPosition().x / cellWidth) +
-		(floor((m_body.getPosition().y + m_body.getTexture().getSize().y) / cellHeight) * numCols);
-	int cellID_BR = floor((m_body.getPosition().x + m_body.getTexture().getSize().x) / cellWidth) +
-		(floor((m_body.getPosition().y + m_body.getTexture().getSize().y) / cellHeight) * numCols);
+
+	int cellID_TL = floor(posX / cellWidth) + (floor(posY / cellHeight) * numCols);
+	int cellID_TR = floor((posX + length) / cellWidth) + (floor(posY / cellHeight) * numCols);
+	int cellID_BL = floor(posX / cellWidth) + (floor((posY + height) / cellHeight) * numCols);
+	int cellID_BR = floor((posX + length) / cellWidth) + (floor((posY + height) / cellHeight) * numCols);
 
 	// Usage: insert a new map entry
 	t_spatialMap[cellID_TL].push_back(m_body);
 	t_spatialMap[cellID_TR].push_back(m_body);
 	t_spatialMap[cellID_BL].push_back(m_body);
 	t_spatialMap[cellID_BR].push_back(m_body);
-}
-
-void Crab::update(float t_dt, std::map<int, std::list<sf::Sprite>>& t_spatialMap)
-{
-	move(t_dt);
-	//updateSpatialMap(t_spatialMap);
-}
-
-bool Crab::collision(sf::Sprite t_sprite, std::map<int, std::list<sf::Sprite>>& t_spatialMap)
-{
-	return false;
 }
 
 void Crab::move(float t_dt)
@@ -71,4 +65,3 @@ sf::Sprite Crab::getSprite()
 {
 	return m_body;
 }
-
