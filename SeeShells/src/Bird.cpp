@@ -14,6 +14,24 @@ void Bird::update(float dt)
 {
 	move(dt);
 	visionCone();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X))
+	{
+		m_state = BirdState::SEARCHING;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C))
+	{
+		m_state = BirdState::ALERT;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::V))
+	{
+		m_state = BirdState::PURSUING;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B))
+	{
+		m_state = BirdState::ATTACKING;
+	}
+
 }
 
 void Bird::render(sf::RenderWindow& t_window)
@@ -30,15 +48,23 @@ void Bird::visionCone()
 	switch (m_state)
 	{
 	case BirdState::SEARCHING:
+		m_angleOfFan = 45.0f;
+		m_reachOfFan = 100.0f;
 		coneColor = sf::Color(0, 255, 0, 50);
 		break;
 	case BirdState::ALERT:
+		m_angleOfFan = 35.0f;
+		m_reachOfFan = 100.0f;
 		coneColor = sf::Color(255, 255, 0, 50);
 		break;
 	case BirdState::PURSUING:
+		m_angleOfFan = 25.0f;
+		m_reachOfFan = 125.0f;
 		coneColor = sf::Color(255, 165, 0, 50);
 		break;
 	case BirdState::ATTACKING:
+		m_angleOfFan = 15.0f;
+		m_reachOfFan = 150.0f;
 		coneColor = sf::Color(255, 0, 0, 50);
 		break;
 	default:
@@ -50,13 +76,13 @@ void Bird::visionCone()
 
 	for (int i = 1; i < 12; i++)
 	{
-		float relAngle = (i - 1) * (45.0f / 10) - (45.0f / 2.0f);
+		float relAngle = (i - 1) * (m_angleOfFan / 10) - (m_angleOfFan / 2.0f);
 
 		float totalAngle = m_body.getRotation().asDegrees() + relAngle + 90.0f;
 
 		float radAngle = totalAngle * (3.14159f / 180.f);
 
-		m_visionCone[i].position = { spritePos.x + std::cos(radAngle) * 100, spritePos.y + std::sin(radAngle) * 100 };
+		m_visionCone[i].position = { spritePos.x + std::cos(radAngle) * m_reachOfFan, spritePos.y + std::sin(radAngle) * m_reachOfFan };
 		m_visionCone[i].color = coneColor;
 	}
 }
@@ -74,10 +100,24 @@ void Bird::move(float dt)
 
 		m_body.setRotation(sf::radians(m_angle));
 		m_body.setPosition(newPos);
+		break;
 	case BirdState::ALERT:
-	case BirdState::PURSUING:
+		m_angle += ((m_speed/2) * dt / 1000);
 
+		newPos.x = m_center.x + m_radius * std::cos(m_angle);
+		newPos.y = m_center.y + m_radius * std::sin(m_angle);
+
+		m_body.setRotation(sf::radians(m_angle));
+		m_body.setPosition(newPos);
+		break;
+	case BirdState::PURSUING:
+		break;
+	case BirdState::ATTACKING:
+		break;
+	default:
+		break;
 	}
+
 	if (m_angle >= 360.0f)
 	{
 		m_angle = 0.0f;

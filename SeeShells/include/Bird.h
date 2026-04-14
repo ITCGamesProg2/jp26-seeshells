@@ -30,6 +30,8 @@ private:
 	float m_speed = 0.5f;
 	BirdState m_state = BirdState::SEARCHING;
 	sf::VertexArray m_visionCone;
+	float m_angleOfFan = 45.0f;
+	float m_reachOfFan = 100.0f;
 };
 
 #include "Turtle.h"
