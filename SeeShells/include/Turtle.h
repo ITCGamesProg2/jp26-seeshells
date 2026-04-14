@@ -36,6 +36,7 @@ public:
 	void render(sf::RenderWindow& t_window);
 
 	void manageScent();
+	std::vector<Scent> getScent();
 
 };
 

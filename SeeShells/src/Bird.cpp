@@ -3,7 +3,8 @@
 Bird::Bird(AssetManager& t_assetManager, sf::Vector2f t_pos):
 	m_assetManager(t_assetManager),
 	m_body(t_assetManager.getTexture("bird")),
-	m_center(t_pos)
+	m_center(t_pos),
+	m_visionCone(sf::PrimitiveType::TriangleFan, 12)
 {
 	m_body.setPosition({ 600.0f,600.0f });
 	m_body.setOrigin({ 16.0f,16.0f });
@@ -12,18 +13,18 @@ Bird::Bird(AssetManager& t_assetManager, sf::Vector2f t_pos):
 void Bird::update(float dt)
 {
 	move(dt);
+	visionCone();
 }
 
 void Bird::render(sf::RenderWindow& t_window)
 {
-	t_window.draw(visionCone());
+	t_window.draw(m_visionCone);
 	t_window.draw(m_body);
 }
 
-sf::VertexArray Bird::visionCone()
+void Bird::visionCone()
 {
 	sf::Vector2f spritePos = m_body.getPosition();
-	sf::VertexArray visionCone(sf::PrimitiveType::TriangleFan, 12);
 	sf::Color coneColor;
 	
 	switch (m_state)
@@ -33,6 +34,7 @@ sf::VertexArray Bird::visionCone()
 		break;
 	case BirdState::ALERT:
 		coneColor = sf::Color(255, 255, 0, 50);
+		break;
 	case BirdState::PURSUING:
 		coneColor = sf::Color(255, 165, 0, 50);
 		break;
@@ -43,8 +45,8 @@ sf::VertexArray Bird::visionCone()
 		break;
 	}
 
-	visionCone[0].position = { spritePos.x, spritePos.y };
-	visionCone[0].color = coneColor;
+	m_visionCone[0].position = { spritePos.x, spritePos.y };
+	m_visionCone[0].color = coneColor;
 
 	for (int i = 1; i < 12; i++)
 	{
@@ -54,25 +56,48 @@ sf::VertexArray Bird::visionCone()
 
 		float radAngle = totalAngle * (3.14159f / 180.f);
 
-		visionCone[i].position = { spritePos.x + std::cos(radAngle) * 100, spritePos.y + std::sin(radAngle) * 100 };
-		visionCone[i].color = coneColor;
+		m_visionCone[i].position = { spritePos.x + std::cos(radAngle) * 100, spritePos.y + std::sin(radAngle) * 100 };
+		m_visionCone[i].color = coneColor;
 	}
-
-	return visionCone;
 }
 
 void Bird::move(float dt)
 {
+	sf::Vector2f newPos;
+	switch (m_state)
+	{
+	case BirdState::SEARCHING:
+		m_angle += (m_speed * dt / 1000);
+
+		newPos.x = m_center.x + m_radius * std::cos(m_angle);
+		newPos.y = m_center.y + m_radius * std::sin(m_angle);
+
+		m_body.setRotation(sf::radians(m_angle));
+		m_body.setPosition(newPos);
+	case BirdState::ALERT:
+	case BirdState::PURSUING:
+
+	}
 	if (m_angle >= 360.0f)
 	{
 		m_angle = 0.0f;
 	}
-	sf::Vector2f newPos;
-	m_angle += (m_speed * dt/1000);
+}
 
-	newPos.x = m_center.x + m_radius * std::cos(m_angle);
-	newPos.y = m_center.y + m_radius * std::sin(m_angle);
-
-	m_body.setRotation(sf::radians(m_angle));
-	m_body.setPosition(newPos);
+void Bird::collisionVisionConeScent(std::vector<Scent> t_playerScent)
+{
+	for (int i = 0; i < t_playerScent.size(); i++)
+	{
+		if (t_playerScent.at(i).m_circle.getGlobalBounds().findIntersection(m_visionCone.getBounds()))
+		{
+			if (i < 2)
+			{
+				m_state = BirdState::ALERT;
+			}
+			else
+			{
+				m_state = BirdState::PURSUING;
+			}
+		}
+	}
 }

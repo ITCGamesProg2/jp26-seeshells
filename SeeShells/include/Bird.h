@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
 
+struct Scent;
 enum class BirdState
 {
 	SEARCHING,
@@ -17,8 +18,9 @@ public:
 	Bird(AssetManager& t_assetManager, sf::Vector2f pos);
 	void update(float dt);
 	void render(sf::RenderWindow& t_window);
-	sf::VertexArray visionCone();
+	void visionCone();
 	void move(float dt);
+	void collisionVisionConeScent(std::vector<Scent> t_playerScent);
 private:
 	sf::Sprite m_body;
 	AssetManager &m_assetManager;
@@ -27,5 +29,7 @@ private:
 	float m_angle;
 	float m_speed = 0.5f;
 	BirdState m_state = BirdState::SEARCHING;
+	sf::VertexArray m_visionCone;
 };
 
+#include "Turtle.h"

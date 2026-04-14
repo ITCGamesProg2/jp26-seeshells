@@ -96,3 +96,8 @@ void Turtle::manageScent()
 	m_scentTimer.start();
 }
 
+std::vector<Scent> Turtle::getScent()
+{
+	return m_scentTrail;
+}
+
