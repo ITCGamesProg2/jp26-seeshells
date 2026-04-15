@@ -157,6 +157,7 @@ void Game::checkCollision()
 	sf::Sprite crabby = m_crab.getSprite();
 	if (m_environment.entityCollison(crabby))
 	{
+		m_crab.changeDir();
 		std::cout << "crabby collided with tile\n";
 	}
 }

@@ -37,9 +37,7 @@ void Crab::move(float t_dt)
 {
 	if (m_moveTimer.getElapsedTime().asSeconds() > m_moveDelay)
 	{
-		m_moveDelay = 5;
-		m_moveTimer.restart();
-		m_goingLeft = !m_goingLeft;
+		changeDir();
 	}
 
 
@@ -64,4 +62,11 @@ void Crab::render(sf::RenderWindow& t_window)
 sf::Sprite Crab::getSprite()
 {
 	return m_body;
+}
+
+void Crab::changeDir()
+{
+	m_moveDelay = 5;
+	m_moveTimer.restart();
+	m_goingLeft = !m_goingLeft;
 }

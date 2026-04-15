@@ -42,7 +42,7 @@ void Environment::generateObstacles()
 		}
 
 		
-		sprite.setPosition({rand() % 1000 + 200.0f, rand()% 700 + 50.0f});
+		sprite.setPosition({rand() % 1200 + 100.0f, rand()% 700 + 50.0f});
 		m_branches.push_back(sprite);
 
 		//Update spatial Map with this entry of obstacle 
