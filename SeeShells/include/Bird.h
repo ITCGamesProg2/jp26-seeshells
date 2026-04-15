@@ -21,6 +21,7 @@ public:
 	void visionCone();
 	void move(float dt);
 	void collisionVisionConeScent(std::vector<Scent> t_playerScent);
+	void rotate();
 private:
 	sf::Sprite m_body;
 	AssetManager &m_assetManager;
@@ -30,8 +31,13 @@ private:
 	float m_speed = 0.5f;
 	BirdState m_state = BirdState::SEARCHING;
 	sf::VertexArray m_visionCone;
-	float m_angleOfFan = 45.0f;
-	float m_reachOfFan = 100.0f;
+	float m_angleOfFan;
+	float m_reachOfFan;
+	sf::Vector2f m_chasingPoint;
+	sf::Vector2f m_direction;
+	sf::Angle m_rotation;
+	bool m_rotated = true;
+	bool m_moving = true;
 };
 
 #include "Turtle.h"
