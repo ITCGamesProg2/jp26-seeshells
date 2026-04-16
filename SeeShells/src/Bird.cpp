@@ -9,18 +9,11 @@ Bird::Bird(AssetManager& t_assetManager, sf::Vector2f t_pos):
 	m_body.setPosition({ 600.0f,600.0f });
 	m_body.setOrigin({ 16.0f,16.0f });
 	m_angle = 0.0f;
-	m_chasingPoint = { 1000.0f,1000.0f };
 }
-void Bird::update(float dt)
+void Bird::update(float dt, std::vector<Scent> &t_playerScent)
 {
-	if (!m_rotated)
-	{
-		rotate();
-	}
-	if (m_moving)
-	{
-		move(dt);
-	}
+	collisionVisionConeScent(t_playerScent);
+	move(dt);
 	visionCone();
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X))
@@ -34,11 +27,6 @@ void Bird::update(float dt)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::V))
 	{
 		m_state = BirdState::PURSUING;
-		m_direction.x = m_chasingPoint.x - m_body.getPosition().x;
-		m_direction.y = m_chasingPoint.y - m_body.getPosition().y;
-		m_direction = m_direction.normalized();
-		m_rotated = false;
-		m_moving = false;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B))
 	{
@@ -103,6 +91,7 @@ void Bird::visionCone()
 void Bird::move(float dt)
 {
 	sf::Vector2f newPos;
+	float targetAngleDeg;
 	switch (m_state)
 	{
 	case BirdState::SEARCHING:
@@ -124,13 +113,14 @@ void Bird::move(float dt)
 		m_body.setPosition(newPos);
 		break;
 	case BirdState::PURSUING:
-		newPos.x = m_body.getPosition().x + (m_direction.x * m_speed);
-		newPos.y = m_body.getPosition().y + (m_direction.y * m_speed);
+		targetAngleDeg = std::atan2(m_direction.y, m_direction.x) * (180.0f / 3.14159f);
+		targetAngleDeg = targetAngleDeg * (3.14159f / 180.0f);
+		newPos.x = m_body.getPosition().x + std::cos(targetAngleDeg) * m_speed * (dt / 1000.0f);
+		newPos.y = m_body.getPosition().y + std::sin(targetAngleDeg) * m_speed * (dt / 1000.0f);
 
-		//m_angle = std::atan2f(m_direction.y, m_direction.x);
-
-		//m_body.setRotation(sf::radians(m_angle - 90.0f));
 		m_body.setPosition(newPos);
+		m_body.setRotation(sf::degrees(targetAngleDeg + 90.0f));
+
 		break;
 	case BirdState::ATTACKING:
 		break;
@@ -144,47 +134,18 @@ void Bird::move(float dt)
 	}
 }
 
-void Bird::collisionVisionConeScent(std::vector<Scent> t_playerScent)
+void Bird::collisionVisionConeScent(std::vector<Scent> &t_playerScent)
 {
-	for (int i = 0; i < t_playerScent.size(); i++)
+	sf::Vector2f birdPos = m_body.getPosition();
+	for (int i = t_playerScent.size() - 1; i >= 0; i--)
 	{
 		if (t_playerScent.at(i).m_circle.getGlobalBounds().findIntersection(m_visionCone.getBounds()))
 		{
-			if (i < 2)
-			{
-				m_state = BirdState::ALERT;
-			}
-			else
-			{
-				m_state = BirdState::PURSUING;
-				m_chasingPoint = t_playerScent.at(i).m_circle.getPosition();
-				m_direction.x = m_chasingPoint.x - m_body.getPosition().x;
-				m_direction.y = m_chasingPoint.y - m_body.getPosition().y;
-				m_direction = m_direction.normalized();
-			}
+			m_state = BirdState::PURSUING;
+			m_chasingPoint = t_playerScent.at(i).m_circle.getPosition();
+			m_direction = m_chasingPoint - birdPos;
+			m_direction = m_direction.normalized();
+			t_playerScent.erase(t_playerScent.begin() + i);
 		}
 	}
-}
-
-void Bird::rotate()
-{
-	float cross;
-	cross = std::cos(m_body.getRotation().asRadians()) * m_direction.y - std::sin(m_body.getRotation().asRadians()) * m_direction.x;
-	float rotationFloat;
-
-	if (std::abs(cross) < 0.01)
-	{
-		cross = 0.0;
-		m_rotated = true;
-		m_moving = true;
-	}
-	else if (cross > 0.01)
-	{
-		m_rotation += sf::degrees(1.0);
-	}
-	else
-	{
-		m_rotation -= sf::degrees(1.0);
-	}
-	m_body.setRotation(m_rotation + sf::radians(1.57f));
 }

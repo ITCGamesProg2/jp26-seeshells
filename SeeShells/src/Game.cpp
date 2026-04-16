@@ -124,7 +124,7 @@ void Game::update(double dt)
 {
 	m_turtle.update(dt);
 	m_crab.update(dt);
-	m_bird.update(dt);
+	m_bird.update(dt, m_turtle.getScent());
 }
 
 ////////////////////////////////////////////////////////////

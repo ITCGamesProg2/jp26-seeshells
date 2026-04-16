@@ -16,12 +16,11 @@ class Bird
 {
 public:
 	Bird(AssetManager& t_assetManager, sf::Vector2f pos);
-	void update(float dt);
+	void update(float dt, std::vector<Scent> &t_playerScent);
 	void render(sf::RenderWindow& t_window);
 	void visionCone();
 	void move(float dt);
-	void collisionVisionConeScent(std::vector<Scent> t_playerScent);
-	void rotate();
+	void collisionVisionConeScent(std::vector<Scent> &t_playerScent);
 private:
 	sf::Sprite m_body;
 	AssetManager &m_assetManager;
@@ -36,8 +35,6 @@ private:
 	sf::Vector2f m_chasingPoint;
 	sf::Vector2f m_direction;
 	sf::Angle m_rotation;
-	bool m_rotated = true;
-	bool m_moving = true;
 };
 
 #include "Turtle.h"
