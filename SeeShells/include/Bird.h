@@ -22,7 +22,7 @@ public:
 	void move(float dt);
 	void collisionVisionConeScent(std::vector<Scent> &t_playerScent);
 	sf::Angle lookAt(sf::Vector2f  t_pointToLookAt);
-	void rotateCone(sf::Angle t_angle);
+	
 private:
 	sf::Sprite m_body;
 	AssetManager &m_assetManager;
@@ -37,6 +37,11 @@ private:
 	sf::Vector2f m_chasingPoint;
 	sf::Vector2f m_direction;
 	sf::Angle m_rotation;
+	sf::Vector2f m_movingFrom;
+	bool m_chasing = false;
+	bool m_returning = false;
+
+	float m_diffUpdating;
 };
 
 #include "Turtle.h"
