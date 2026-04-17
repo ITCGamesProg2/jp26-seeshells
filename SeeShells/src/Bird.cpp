@@ -32,6 +32,11 @@ void Bird::update(float dt, std::vector<Scent> &t_playerScent)
 	{
 		m_state = BirdState::ATTACKING;
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+	{
+		//m_state = BirdState::ATTACKING;
+		m_state = BirdState::SEARCHING;
+	}
 
 }
 
@@ -113,13 +118,15 @@ void Bird::move(float dt)
 		m_body.setPosition(newPos);
 		break;
 	case BirdState::PURSUING:
-		targetAngleDeg = std::atan2(m_direction.y, m_direction.x) * (180.0f / 3.14159f);
-		targetAngleDeg = targetAngleDeg * (3.14159f / 180.0f);
-		newPos.x = m_body.getPosition().x + std::cos(targetAngleDeg) * m_speed * (dt / 1000.0f);
-		newPos.y = m_body.getPosition().y + std::sin(targetAngleDeg) * m_speed * (dt / 1000.0f);
+		targetAngleDeg = std::atan2(m_direction.y, m_direction.x);
+	
+		/*newPos.x = m_body.getPosition().x + std::cos(targetAngleDeg) * m_speed * (dt / 1000.0f);
+		newPos.y = m_body.getPosition().y + std::sin(targetAngleDeg) * m_speed * (dt / 1000.0f);*/
+		newPos.x = m_body.getPosition().x + (m_direction.x * m_speed);
+		newPos.y = m_body.getPosition().y + (m_direction.y * m_speed);
 
 		m_body.setPosition(newPos);
-		m_body.setRotation(sf::degrees(targetAngleDeg + 90.0f));
+		m_body.setRotation(lookAt(m_chasingPoint));
 
 		break;
 	case BirdState::ATTACKING:
@@ -137,15 +144,30 @@ void Bird::move(float dt)
 void Bird::collisionVisionConeScent(std::vector<Scent> &t_playerScent)
 {
 	sf::Vector2f birdPos = m_body.getPosition();
-	for (int i = t_playerScent.size() - 1; i >= 0; i--)
+	for(int i = 1; i < t_playerScent.size(); i++)
 	{
 		if (t_playerScent.at(i).m_circle.getGlobalBounds().findIntersection(m_visionCone.getBounds()))
 		{
 			m_state = BirdState::PURSUING;
 			m_chasingPoint = t_playerScent.at(i).m_circle.getPosition();
-			m_direction = m_chasingPoint - birdPos;
-			m_direction = m_direction.normalized();
-			t_playerScent.erase(t_playerScent.begin() + i);
 		}
 	}
 }
+
+sf::Angle Bird::lookAt(sf::Vector2f t_pointToLookAt)
+{
+	sf::Angle angle;
+	m_direction = t_pointToLookAt - m_body.getPosition();
+	m_direction = m_direction.normalized();
+
+	//angle = sf::degrees(std::cos(m_direction.y) * std::sin(m_direction.x));
+	angle = m_direction.angle();
+
+	return angle;
+}
+
+void Bird::rotateCone(sf::Angle t_angle)
+{
+	   //
+}
+

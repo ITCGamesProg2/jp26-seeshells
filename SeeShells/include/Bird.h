@@ -21,6 +21,8 @@ public:
 	void visionCone();
 	void move(float dt);
 	void collisionVisionConeScent(std::vector<Scent> &t_playerScent);
+	sf::Angle lookAt(sf::Vector2f  t_pointToLookAt);
+	void rotateCone(sf::Angle t_angle);
 private:
 	sf::Sprite m_body;
 	AssetManager &m_assetManager;
