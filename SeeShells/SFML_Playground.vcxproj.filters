@@ -45,6 +45,9 @@
     <ClInclude Include="include\Observer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp">
@@ -69,9 +72,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\AudioSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Observer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
