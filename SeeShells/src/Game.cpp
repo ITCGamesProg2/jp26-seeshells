@@ -26,6 +26,8 @@ void Game::init()
 
 	m_environment.generateObstacles();
 
+	m_turtle.addObserver(&m_audioSystem);
+
 #ifdef TEST_FPS
 	x_updateFPS.setFont(m_arialFont);
 	x_updateFPS.setPosition(sf::Vector2f{ 20.0f, 300.0f });
@@ -124,6 +126,7 @@ void Game::processKeyPressed(const std::optional<sf::Event>& t_event)
 void Game::update(double dt)
 {
 	m_turtle.update(dt);
+
 	m_crab.update(dt);
 	m_bird.update(dt, m_turtle.getScent());
 
@@ -149,11 +152,12 @@ void Game::checkCollision()
 	if (m_environment.entityCollison(playa))
 	{
 		std::cout << "Player collided with tile\n";
+		
 	}
 
 	if (entityCollision())
 	{
-		std::cout << "playa on crabby violence\n";
+		m_turtle.notifyAll(Event::DIE);
 	}
 
 	sf::Sprite crabby = m_crab.getSprite();

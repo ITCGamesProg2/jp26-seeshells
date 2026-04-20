@@ -21,6 +21,7 @@
 #include "Environment.h"
 
 #include "AssetManager.h"
+#include "AudioSystem.h"
 
 /// <summary>
 /// @author RP
@@ -131,6 +132,8 @@ protected:
 	Turtle m_turtle;
 	Crab m_crab;
 	Bird m_bird;
+
+	AudioSystem m_audioSystem;
 
 #ifdef TEST_FPS
 	sf::Text x_updateFPS{ m_arialFont };	// text used to display updates per second.

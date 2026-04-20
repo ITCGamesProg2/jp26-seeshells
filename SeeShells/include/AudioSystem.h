@@ -2,6 +2,7 @@
 
 #include "Observer.h"
 #include "Event.h"
+#include <iostream>
 
 class AudioSystem : public Observer {
 public:

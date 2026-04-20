@@ -61,6 +61,10 @@ void Turtle::move(float t_dt)
 	{
 		m_direction = m_direction.normalized();
 	}
+	else if (m_direction.x != 0 || m_direction.y != 0)
+	{
+		notifyAll(Event::MOVE);
+	}
 	
 
 	sf::Vector2f pos = m_body.getPosition();

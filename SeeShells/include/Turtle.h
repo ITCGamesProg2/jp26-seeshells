@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
+#include "Subject.h"
 
 struct Scent
 {
@@ -9,7 +10,7 @@ struct Scent
 	sf::Clock m_timer;
 };
 
-class Turtle
+class Turtle : public Subject
 {
 private:
 
