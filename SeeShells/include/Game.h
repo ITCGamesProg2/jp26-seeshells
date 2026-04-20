@@ -11,10 +11,14 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <map> 
+#include <list>
+
 #include "ScreenSize.h"
 #include "Turtle.h"
 #include "Crab.h"
 #include "Bird.h"
+#include "Environment.h"
 
 #include "AssetManager.h"
 
@@ -33,7 +37,6 @@
 ///		Game game;
 ///		game.run();
 /// </summary>
-
 class Game
 {
 public:
@@ -68,6 +71,25 @@ protected:
 	void update(double dt);
 
 	/// <summary>
+	/// Function encapsulating ALL collision checks
+	/// </summary>
+	void checkCollision();
+
+
+	/// <summary>
+	/// Checking collision between player and all entities
+	/// </summary>
+	/// <returns></returns>
+	bool entityCollision();
+
+	/// <summary>
+	/// Update the spatial map for all moving entities.
+	/// So essentially, clear the map to get rid of old tile correspondence.
+	/// Then update the tile again with new pos.
+	/// </summary>
+	void updateSpatialMap();
+
+	/// <summary>
 	/// @brief Draws the background and foreground game objects in the SFML window.
 	/// The render window is always cleared to black before anything is drawn.
 	/// </summary>
@@ -86,12 +108,25 @@ protected:
 	/// <param name="t_event">key pressed event</param>
 	void processKeyPressed(const std::optional<sf::Event>& t_event);
 
+
 	void collisionVisionConeScent(std::vector<Scent> t_playerScent, sf::VertexArray t_visionCone);
+
+	static int const numCols{ 10 };
+	static int const numRows{ 10 };
+	static int const cellWidth{ 64 };
+	static int const cellHeight{ 64 };
+
+
+	// Need to #include <map> and #include <list>
+	// Declaration of std::map
+	std::map<int, std::list<sf::Sprite>> m_spatialMap;
 
 	// Font used for all text
 	sf::Font m_arialFont;
 	// main window
 	sf::RenderWindow m_window;
+
+	Environment m_environment;
 
 	Turtle m_turtle;
 	Crab m_crab;

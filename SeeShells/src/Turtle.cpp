@@ -101,3 +101,9 @@ std::vector<Scent> Turtle::getScent()
 	return m_scentTrail;
 }
 
+
+sf::Sprite Turtle::getSprite()
+{
+	return m_body;
+}
+

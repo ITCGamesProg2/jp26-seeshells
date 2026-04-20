@@ -37,6 +37,7 @@ public:
 
 	void manageScent();
 	std::vector<Scent> getScent();
+	sf::Sprite getSprite();
 
 };
 
