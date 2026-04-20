@@ -127,7 +127,7 @@ void Bird::move(float dt)
 	case BirdState::PURSUING:
 		
 		m_body.setRotation(lookAt(m_chasingPoint));
-		if (m_diffUpdating > m_speed)
+		if (m_diffUpdating > m_speed / 2)
 		{
 			newPos.x = m_body.getPosition().x + (m_direction.x * m_speed * dt / 10);
 			newPos.y = m_body.getPosition().y + (m_direction.y * m_speed * dt / 10);
@@ -184,11 +184,17 @@ sf::Angle Bird::lookAt(sf::Vector2f t_pointToLookAt)
 {
 	sf::Angle angle;
 	m_direction = t_pointToLookAt - m_body.getPosition();
-	m_direction = m_direction.normalized();
-
 	m_diffUpdating = std::sqrt((t_pointToLookAt.x - m_body.getPosition().x) * (t_pointToLookAt.x - m_body.getPosition().x) + (t_pointToLookAt.y - m_body.getPosition().y) * (t_pointToLookAt.y - m_body.getPosition().y));
+	if (m_direction != sf::Vector2f{ 0.0f,0.0f })
+	{
+		m_direction = m_direction.normalized();
 
-	angle = m_direction.angle();
+		angle = m_direction.angle();
+	}
+	else
+	{
+		return m_body.getRotation();
+	}
 	return angle;
 }
 
