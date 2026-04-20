@@ -19,24 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioSystem.h" />
     <ClInclude Include="include\AssetManager.h" />
+    <ClInclude Include="include\AudioSystem.h" />
     <ClInclude Include="include\Bird.h" />
     <ClInclude Include="include\Crab.h" />
     <ClInclude Include="include\Environment.h" />
     <ClInclude Include="include\Game.h" />
+    <ClInclude Include="include\Observer.h" />
     <ClInclude Include="include\ResourceManager.h" />
     <ClInclude Include="include\ScreenSize.h" />
     <ClInclude Include="include\Turtle.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AudioSystem.cpp" />
     <ClCompile Include="src\AssetManager.cpp" />
+    <ClCompile Include="src\AudioSystem.cpp" />
     <ClCompile Include="src\Bird.cpp" />
     <ClCompile Include="src\Crab.cpp" />
     <ClCompile Include="src\Environment.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Observer.cpp" />
     <ClCompile Include="src\Turtle.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
