@@ -125,14 +125,83 @@ void Game::processKeyPressed(const std::optional<sf::Event>& t_event)
 ////////////////////////////////////////////////////////////
 void Game::update(double dt)
 {
-	m_turtle.update(dt);
+	switch (m_state)
+	{
+	case GameState::START:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
+		{
+			lastPressed = sf::Keyboard::Key::P;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::L))
+		{
+			if (lastPressed == sf::Keyboard::Key::P)
+			{
+				lastPressed = sf::Keyboard::Key::L;
+			}
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+		{
+			if (lastPressed == sf::Keyboard::Key::L)
+			{
+				lastPressed = sf::Keyboard::Key::A;
+			}
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y))
+		{
+			if (lastPressed == sf::Keyboard::Key::A)
+			{
+				m_state = GameState::PLAY;
+			}
+		}
+		break;
 
-	m_crab.update(dt);
-	m_bird.update(dt, m_turtle.getScent());
+	case GameState::PLAY:
 
-	updateSpatialMap();
-	checkCollision();
+		m_turtle.update(dt);
 
+		m_crab.update(dt);
+		m_bird.update(dt, m_turtle.getScent());
+
+		updateSpatialMap();
+		checkCollision();
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R))
+		{
+			m_state = GameState::END;
+		}
+		break;
+
+	case GameState::END:
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
+		{
+			lastPressed = sf::Keyboard::Key::P;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::L))
+		{
+			if (lastPressed == sf::Keyboard::Key::P)
+			{
+				lastPressed = sf::Keyboard::Key::L;
+			}
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+		{
+			if (lastPressed == sf::Keyboard::Key::L)
+			{
+				lastPressed = sf::Keyboard::Key::A;
+			}
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Y))
+		{
+			if (lastPressed == sf::Keyboard::Key::A)
+			{
+				m_state = GameState::PLAY;
+			}
+		}
+		break;
+
+	default:
+		break;
+	}
 }
 
 
@@ -227,12 +296,51 @@ bool Game::entityCollision()
 void Game::render()
 {
 	m_window.clear(sf::Color(0, 0, 0, 0));
+	sf::Text text1(m_arialFont);
+	sf::Text text2(m_arialFont);
+	switch (m_state)
+	{
+	case GameState::START:
+		m_window.clear(sf::Color(173, 216, 230, 255));
+		text1.setString("See Shells");
+		text1.setCharacterSize(200);
+		text1.setFillColor(sf::Color(117, 184, 79));
+		text1.setPosition({ 360.0f,180.0f });
 
-	m_turtle.render(m_window);
-	m_crab.render(m_window);
-	m_bird.render(m_window);
+		text2.setString("Type PLAY to play");
+		text2.setCharacterSize(50);
+		text2.setFillColor(sf::Color(117, 184, 79));
+		text2.setPosition({ 525.0f,550.0f });
 
-	m_environment.render(m_window);
+		m_window.draw(text1);
+		m_window.draw(text2);
+		break;
+	case GameState::PLAY:
+
+		m_turtle.render(m_window);
+		m_crab.render(m_window);
+		m_bird.render(m_window);
+
+		m_environment.render(m_window);
+		break;
+	case GameState::END:
+		m_window.clear(sf::Color(173, 216, 230, 255));
+		text1.setString("Gameover");
+		text1.setCharacterSize(200);
+		text1.setFillColor(sf::Color(117, 184, 79));
+		text1.setPosition({ 390.0f,180.0f });
+
+		text2.setString("Type PLAY to play again");
+		text2.setCharacterSize(50);
+		text2.setFillColor(sf::Color(117, 184, 79));
+		text2.setPosition({ 495.0f,550.0f });
+
+		m_window.draw(text1);
+		m_window.draw(text2);
+		break;
+	default:
+		break;
+	}
 
 #ifdef TEST_FPS
 	m_window.draw(x_updateFPS);
