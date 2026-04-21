@@ -6,11 +6,19 @@ Crab::Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t
 {
 	m_body.setPosition({ 100,100 });
 	updateSpatialMap(t_spatialMap);
+
+
+	m_moveAnimation.addFrame(sf::IntRect({ 0,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 32,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 64,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 96,0 }, { 32,32 }));
+	m_currAnimation = &m_moveAnimation;
 }
 
 void Crab::update(float t_dt)
 {
 	move(t_dt);
+	m_currAnimation->update();
 }
 
 void Crab::updateSpatialMap(std::map<int, std::list<sf::Sprite>>& t_spatialMap)
@@ -58,6 +66,9 @@ void Crab::move(float t_dt)
 
 void Crab::render(sf::RenderWindow& t_window)
 {
+	sf::IntRect frame = m_currAnimation->getCurrentFrame();
+
+	m_body.setTextureRect(frame);
 	t_window.draw(m_body);
 }
 

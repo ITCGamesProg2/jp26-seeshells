@@ -27,6 +27,9 @@ private:
 	sf::Clock m_moveTimer;
 	int m_moveDelay;
 
+	Animation m_moveAnimation;
+	Animation* m_currAnimation;
+
 public:
 
 	Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t_spatialMap);

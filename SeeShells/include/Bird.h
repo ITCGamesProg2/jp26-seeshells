@@ -43,7 +43,8 @@ private:
 	bool m_returning = false;
 
 	float m_diffUpdating;
-	Animation m_animation;
+	Animation m_moveAnimation;
+	Animation* m_currAnimation;
 };
 
 #include "Turtle.h"

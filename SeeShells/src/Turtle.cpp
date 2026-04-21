@@ -6,14 +6,14 @@ Turtle::Turtle(AssetManager &t_assetManager)
 {
 	m_body.setOrigin({ 16.0f,16.0f }); 
 
-	m_animation.addFrame(sf::IntRect({ 0,0 }, { 32,32 }));
-	m_animation.addFrame(sf::IntRect({ 32,0 }, { 32,32 }));
-	m_animation.addFrame(sf::IntRect({ 64,0 }, { 32,32 }));
-	m_animation.addFrame(sf::IntRect({ 96,0 }, { 32,32 }));
-	m_animation.addFrame(sf::IntRect({ 128,0 }, { 32,32 }));
-	m_animation.addFrame(sf::IntRect({ 160,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 0,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 32,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 64,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 96,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 128,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 160,0 }, { 32,32 }));
 
-	m_currAnimation = &m_animation;
+	m_currAnimation = &m_moveAnimation;
 }
 
 void Turtle::update(float t_dt)
@@ -40,7 +40,7 @@ void Turtle::update(float t_dt)
 		}
 	}
 
-	m_animation.update();
+	m_currAnimation->update();
 }
 
 void Turtle::move(float t_dt)

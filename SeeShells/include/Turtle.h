@@ -28,7 +28,7 @@ private:
 	std::vector<Scent> m_scentTrail;
 	sf::Clock m_scentTimer;
 
-	Animation m_animation;
+	Animation m_moveAnimation;
 	Animation* m_currAnimation;
 
 public:
