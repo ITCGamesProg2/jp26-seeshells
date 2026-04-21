@@ -1,4 +1,5 @@
 #include "Turtle.h"
+#include <iostream>
 
 Turtle::Turtle(AssetManager &t_assetManager)
 	: m_assetManager(t_assetManager), 
@@ -18,6 +19,7 @@ Turtle::Turtle(AssetManager &t_assetManager)
 
 void Turtle::update(float t_dt)
 {
+	handleKeyInput();
 	if (m_scentTrail.size() == 0.0f)
 	{
 		manageScent();
@@ -28,7 +30,6 @@ void Turtle::update(float t_dt)
 		manageScent();
 
 	}
-	move(t_dt);
 
 	for (int i = 0; i < m_scentTrail.size(); i++)
 	{
@@ -39,68 +40,15 @@ void Turtle::update(float t_dt)
 			m_scentTrail.pop_back();
 		}
 	}
+	m_speed = std::clamp(m_speed, -50.0f, 50.0f);
+	sf::Vector2f newPos;
 
+	newPos.x = m_body.getPosition().x + std::cos(m_rotation.asRadians()) * m_speed * (t_dt / 1000);
+	newPos.y = m_body.getPosition().y + std::sin(m_rotation.asRadians()) * m_speed * (t_dt / 1000);
+	m_body.setPosition(newPos);
+	m_body.setRotation(m_rotation);
+	m_speed *= 0.99;
 	m_currAnimation->update();
-}
-
-void Turtle::move(float t_dt)
-{
-	m_direction = { 0,0 };
-
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
-	{
-		m_direction.y -= 1;
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
-	{
-		m_direction.x -= 1;
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
-	{
-		m_direction.y += 1;
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
-	{
-		m_direction.x += 1;
-	}
-
-	if (m_direction.x != 0 && m_direction.y != 0)
-	{
-		m_direction = m_direction.normalized();
-	}
-	else if (m_direction.x != 0 || m_direction.y != 0)
-	{
-		notifyAll(Event::MOVE);
-		rotate();
-	}
-	
-
-	
-
-	sf::Vector2f pos = m_body.getPosition();
-	pos.x += m_direction.x * m_speed * (t_dt/1000);
-	pos.y += m_direction.y * m_speed * (t_dt/1000);
-
-	m_body.setPosition(pos);
-}
-
-void Turtle::rotate()
-{
-	float currentHeading = m_body.getRotation().asDegrees();
-	sf::Vector2 pos = m_body.getPosition();
-
-
-	pos += m_direction;
-	float distance = sqrt((pos.x * pos.x) + (pos.y * pos.y));
-
-	m_body.setRotation(m_direction.angle());
-
-
-	
 }
 
 void Turtle::render(sf::RenderWindow& t_window)
@@ -142,5 +90,61 @@ std::vector<Scent> Turtle::getScent()
 sf::Sprite Turtle::getSprite()
 {
 	return m_body;
+}
+
+void Turtle::handleKeyInput()
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+	{
+		increaseSpeed();
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+	{
+		decreaseSpeed();
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+	{
+		increaseRotation();
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+	{
+		decreaseRotation();
+	}
+}
+
+void Turtle::increaseSpeed()
+{
+	m_speed += 2;
+}
+
+void Turtle::increaseRotation()
+{
+	m_rotation += sf::degrees(1.0);
+
+	if (m_rotation.asDegrees() == 360.0)
+
+	{
+
+		m_rotation = sf::degrees(0.0);
+
+	}
+}
+
+void Turtle::decreaseSpeed()
+{
+	m_speed -= 1;
+}
+
+void Turtle::decreaseRotation()
+{
+	m_rotation -= sf::degrees(1.0);
+
+	if (m_rotation.asDegrees() == 360.0)
+
+	{
+
+		m_rotation = sf::degrees(0.0);
+
+	}
 }
 

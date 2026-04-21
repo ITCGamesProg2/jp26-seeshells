@@ -15,15 +15,11 @@ class Turtle : public Subject
 {
 private:
 
-	sf::Vector2f m_direction{ 0,0 };
-
-	int m_speed{ 100 };
+	float m_speed{ 0.0f };
 
 	sf::Sprite m_body;
 
 	AssetManager& m_assetManager;
-
-	void move(float t_dt);
 
 	std::vector<Scent> m_scentTrail;
 	sf::Clock m_scentTimer;
@@ -31,19 +27,23 @@ private:
 	Animation m_moveAnimation;
 	Animation* m_currAnimation;
 
+	sf::Angle m_rotation{sf::degrees(0.0f)};
+
 public:
 
 	Turtle(AssetManager &t_assetManager);
 
 	//void init();
 	void update(float t_dt);
-	void rotate();
-
 	void render(sf::RenderWindow& t_window);
-
 	void manageScent();
 	std::vector<Scent> getScent();
 	sf::Sprite getSprite();
+	void handleKeyInput();
+	void increaseSpeed();
+	void increaseRotation();
+	void decreaseSpeed();
+	void decreaseRotation();
 
 };
 
