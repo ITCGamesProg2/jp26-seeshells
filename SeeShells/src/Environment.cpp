@@ -9,7 +9,7 @@ void Environment::render(sf::RenderWindow& t_window)
 {
 	for (int index = 0; index < MAX_OBSTACLES; index++)
 	{
-		t_window.draw(m_branches[index]);
+		t_window.draw(m_obstacles[index]);
 	}
 }
 
@@ -43,7 +43,7 @@ void Environment::generateObstacles()
 
 		
 		sprite.setPosition({rand() % 1000 + 200.0f, rand()% 700 + 50.0f});
-		m_branches.push_back(sprite);
+		m_obstacles.push_back(sprite);
 
 		//Update spatial Map with this entry of obstacle 
 		int cellID_TL = floor(sprite.getPosition().x / cellWidth) +
@@ -115,4 +115,9 @@ bool Environment::entityCollison(sf::Sprite t_entity)
 	}
 
 	return false;
+}
+
+std::vector<sf::Sprite>& Environment::getObstacles()
+{
+	return m_obstacles;
 }

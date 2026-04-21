@@ -25,8 +25,7 @@ private:
 	// Declaration of std::map
 	std::map<int, std::list<sf::Sprite>> m_spatialMap;
 
-	std::vector<sf::Sprite> m_rocks;
-	std::vector<sf::Sprite> m_branches;
+	std::vector<sf::Sprite> m_obstacles;
 
 public:
 
@@ -51,6 +50,8 @@ public:
 
 
 	void render(sf::RenderWindow& t_window);
+
+	std::vector<sf::Sprite>& getObstacles();
 
 };
 

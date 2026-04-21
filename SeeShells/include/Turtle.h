@@ -4,6 +4,7 @@
 #include "AssetManager.h"
 #include "Animation.h"
 #include "Subject.h"
+#include "CollisionDetector.h"
 
 struct Scent
 {
@@ -31,9 +32,15 @@ private:
 	Animation m_moveAnimation;
 	Animation* m_currAnimation;
 
+	enum class CollisionState { NORMAL, COLLIDING };
+	CollisionState m_state{ CollisionState::NORMAL };
+
+	std::vector<sf::Sprite>& m_obstacleSprites;
+	sf::Vector2f m_contactNormal;
+
 public:
 
-	Turtle(AssetManager &t_assetManager);
+	Turtle(AssetManager &t_assetManager, std::vector<sf::Sprite>& t_obstacleSprites);
 
 	//void init();
 	void update(float t_dt);
@@ -44,6 +51,9 @@ public:
 	void manageScent();
 	std::vector<Scent> getScent();
 	sf::Sprite getSprite();
+
+	bool checkCollision();
+	void deflect(float t_dt);
 
 };
 

@@ -8,7 +8,7 @@ static float const FPS{ 60.0f };
 Game::Game(AssetManager& t_assetManager)
 	: m_window(sf::VideoMode({ ScreenSize::s_width, ScreenSize::s_height }, 32), "SFML Playground", sf::Style::Default), 
 	m_bird(t_assetManager, {400.0f, 400.0f}),
-	m_turtle(t_assetManager), m_crab(t_assetManager, m_spatialMap), m_environment(t_assetManager)
+	m_turtle(t_assetManager, m_environment.getObstacles()), m_crab(t_assetManager, m_spatialMap), m_environment(t_assetManager)
 {
 	init();
 }

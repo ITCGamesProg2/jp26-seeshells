@@ -1,8 +1,9 @@
 #include "Turtle.h"
 
-Turtle::Turtle(AssetManager &t_assetManager)
+Turtle::Turtle(AssetManager &t_assetManager, std::vector<sf::Sprite>& t_obstacleSprites)
 	: m_assetManager(t_assetManager), 
-	m_body(t_assetManager.getTexture("player"))
+	m_body(t_assetManager.getTexture("player")),
+	m_obstacleSprites(t_obstacleSprites)
 {
 	m_body.setOrigin({ 16.0f,16.0f }); 
 
@@ -28,7 +29,18 @@ void Turtle::update(float t_dt)
 		manageScent();
 
 	}
-	move(t_dt);
+	
+	
+	if (checkCollision())
+	{
+		m_state = CollisionState::COLLIDING;
+	}
+	else
+	{
+		m_state = CollisionState::NORMAL;
+	}
+	
+	
 
 	for (int i = 0; i < m_scentTrail.size(); i++)
 	{
@@ -40,7 +52,38 @@ void Turtle::update(float t_dt)
 		}
 	}
 
-	m_currAnimation->update();
+	if (m_state == CollisionState::NORMAL)
+	{
+		move(t_dt);
+		m_currAnimation->update();
+	}
+	else if (m_state == CollisionState::COLLIDING)
+	{
+		deflect(t_dt);
+
+		if (m_speed < 0.1)
+		{
+			move(t_dt);
+			m_currAnimation->update();
+		}
+	}	
+}
+
+void Turtle::deflect(float t_dt)
+{
+	// Calculate impulse based on speed
+
+	float impulseMagnitude = std::abs(m_speed);
+	// Normalise the contact vector
+	m_contactNormal = m_contactNormal.normalized();
+	// Calculate deflection amount
+	sf::Vector2f deflectVector =
+	{
+		impulseMagnitude * m_contactNormal.x * (static_cast<float>(t_dt) / 1000),
+		impulseMagnitude * m_contactNormal.y * (static_cast<float>(t_dt) / 1000)
+	};
+	// Apply impulse along the contact normal
+	m_body.move({ deflectVector.x, deflectVector.y });
 }
 
 void Turtle::move(float t_dt)
@@ -100,7 +143,7 @@ void Turtle::rotate()
 	m_body.setRotation(m_direction.angle());
 
 
-	
+
 }
 
 void Turtle::render(sf::RenderWindow& t_window)
@@ -144,3 +187,16 @@ sf::Sprite Turtle::getSprite()
 	return m_body;
 }
 
+bool Turtle::checkCollision()
+{
+	for (sf::Sprite const& sprite : m_obstacleSprites)
+	{
+		if (CollisionDetector::collision(m_body, sprite))
+		{
+			// Get contact normal vector between tank base and the wall
+			m_contactNormal = m_body.getPosition() - sprite.getPosition();
+			return true;
+		}
+	}
+	return false;
+}
