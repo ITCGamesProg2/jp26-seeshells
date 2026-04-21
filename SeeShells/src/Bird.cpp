@@ -18,28 +18,6 @@ void Bird::update(float dt, std::vector<Scent> &t_playerScent)
 	move(dt);
 	visionCone();
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::X))
-	{
-		m_state = BirdState::SEARCHING;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C))
-	{
-		m_state = BirdState::ALERT;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::V))
-	{
-		m_state = BirdState::PURSUING;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::B))
-	{
-		m_state = BirdState::ATTACKING;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
-	{
-		//m_state = BirdState::ATTACKING;
-		m_state = BirdState::SEARCHING;
-	}
-
 }
 
 void Bird::render(sf::RenderWindow& t_window)
