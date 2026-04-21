@@ -23,6 +23,13 @@
 #include "AssetManager.h"
 #include "AudioSystem.h"
 
+enum class GameState
+{
+	START,
+	PLAY,
+	END
+};
+
 /// <summary>
 /// @author RP
 /// @date January 2026
@@ -109,9 +116,6 @@ protected:
 	/// <param name="t_event">key pressed event</param>
 	void processKeyPressed(const std::optional<sf::Event>& t_event);
 
-
-	void collisionVisionConeScent(std::vector<Scent> t_playerScent, sf::VertexArray t_visionCone);
-
 	static int const numCols{ 10 };
 	static int const numRows{ 10 };
 	static int const cellWidth{ 64 };
@@ -132,6 +136,9 @@ protected:
 	Turtle m_turtle;
 	Crab m_crab;
 	Bird m_bird;
+
+	GameState m_state = GameState::START;
+	sf::Keyboard::Key lastPressed;
 
 	AudioSystem m_audioSystem;
 
