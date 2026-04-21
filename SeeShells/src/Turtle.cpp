@@ -5,6 +5,15 @@ Turtle::Turtle(AssetManager &t_assetManager)
 	m_body(t_assetManager.getTexture("player"))
 {
 	m_body.setOrigin({ 16.0f,16.0f }); 
+
+	m_animation.addFrame(sf::IntRect({ 0,0 }, { 32,32 }));
+	m_animation.addFrame(sf::IntRect({ 32,0 }, { 32,32 }));
+	m_animation.addFrame(sf::IntRect({ 64,0 }, { 32,32 }));
+	m_animation.addFrame(sf::IntRect({ 96,0 }, { 32,32 }));
+	m_animation.addFrame(sf::IntRect({ 128,0 }, { 32,32 }));
+	m_animation.addFrame(sf::IntRect({ 160,0 }, { 32,32 }));
+
+	m_currAnimation = &m_animation;
 }
 
 void Turtle::update(float t_dt)
@@ -30,6 +39,8 @@ void Turtle::update(float t_dt)
 			m_scentTrail.pop_back();
 		}
 	}
+
+	m_animation.update();
 }
 
 void Turtle::move(float t_dt)
@@ -76,11 +87,15 @@ void Turtle::move(float t_dt)
 
 void Turtle::render(sf::RenderWindow& t_window)
 {
-	t_window.draw(m_body);
 	for (int i = 0; i < m_scentTrail.size(); i++)
 	{
 		t_window.draw(m_scentTrail.at(i).m_circle);
 	}
+
+	sf::IntRect frame = m_currAnimation->getCurrentFrame();
+
+	m_body.setTextureRect(frame);
+	t_window.draw(m_body);
 }
 
 void Turtle::manageScent()

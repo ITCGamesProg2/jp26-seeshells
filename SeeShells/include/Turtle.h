@@ -29,6 +29,7 @@ private:
 	sf::Clock m_scentTimer;
 
 	Animation m_animation;
+	Animation* m_currAnimation;
 
 public:
 
