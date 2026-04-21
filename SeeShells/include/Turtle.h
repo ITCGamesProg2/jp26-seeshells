@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
+#include "Animation.h"
 #include "Subject.h"
 
 struct Scent
@@ -26,6 +27,8 @@ private:
 
 	std::vector<Scent> m_scentTrail;
 	sf::Clock m_scentTimer;
+
+	Animation m_animation;
 
 public:
 

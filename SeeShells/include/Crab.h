@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
-
+#include "Animation.h"
 
 
 class Crab

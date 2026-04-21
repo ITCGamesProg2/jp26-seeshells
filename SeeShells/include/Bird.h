@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
+#include "Animation.h"
 
 struct Scent;
 enum class BirdState
@@ -42,6 +43,7 @@ private:
 	bool m_returning = false;
 
 	float m_diffUpdating;
+	Animation m_animation;
 };
 
 #include "Turtle.h"

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Animation.h" />
     <ClInclude Include="include\AssetManager.h" />
     <ClInclude Include="include\AudioSystem.h" />
     <ClInclude Include="include\Bird.h" />
@@ -33,6 +34,7 @@
     <ClInclude Include="include\Turtle.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\AssetManager.cpp" />
     <ClCompile Include="src\AudioSystem.cpp" />
     <ClCompile Include="src\Bird.cpp" />
