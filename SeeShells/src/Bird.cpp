@@ -20,10 +20,47 @@ Bird::Bird(AssetManager& t_assetManager, sf::Vector2f t_pos):
 
 	m_currAnimation = &m_moveAnimation;
 	m_body.setScale({ 2,2 });
+
+	m_killTimer.reset();
+	m_playerDead = false;
 }
-void Bird::update(float dt, std::vector<Scent> &t_playerScent)
+void Bird::update(float dt, std::vector<Scent> &t_playerScent, sf::Sprite& t_turtle, bool t_isHiding)
 {
-	collisionVisionConeScent(t_playerScent);
+	switch (m_state)
+	{
+	case BirdState::SEARCHING:
+	case BirdState::ALERT:
+		collisionVisionConeScent(t_playerScent);
+		break;
+	case BirdState::PURSUING:
+	case BirdState::ATTACKING:
+		if (!t_isHiding)
+		{
+			if (!m_killTimer.isRunning())
+			{
+				collisionVisionConeTurtle(t_turtle);
+			}
+			else
+			{
+				if (static_cast<float>(m_killTimer.getElapsedTime().asSeconds()) >= 3.0f)
+				{
+					if (collisionVisionConeTurtle(t_turtle))
+					{
+						m_playerDead = true;
+						m_killTimer.reset();
+					}
+					else
+					{
+						m_killTimer.reset();
+						m_state = BirdState::ALERT;
+					}
+				}
+			}
+		}
+		break;
+	default:
+		break;
+	}
 
 	move(dt);
 	visionCone();
@@ -145,6 +182,30 @@ void Bird::move(float dt)
 
 		break;
 	case BirdState::ATTACKING:
+		m_body.setRotation(lookAt(m_chasingPoint));
+		if (m_diffUpdating > m_speed / 2)
+		{
+			newPos.x = m_body.getPosition().x + (m_direction.x * m_speed * dt / 10);
+			newPos.y = m_body.getPosition().y + (m_direction.y * m_speed * dt / 10);
+
+			m_body.setPosition(newPos);
+		}
+		else
+		{
+
+			m_body.setPosition(m_chasingPoint);
+			if (m_returning)
+			{
+				m_returning = false;
+				m_state = BirdState::ALERT;
+			}
+			if (m_chasing)
+			{
+				m_chasingPoint = m_movingFrom;
+				m_chasing = false;
+				m_returning = true;
+			}
+		}
 		break;
 	default:
 		break;
@@ -159,7 +220,7 @@ void Bird::move(float dt)
 void Bird::collisionVisionConeScent(std::vector<Scent> &t_playerScent)
 {
 	sf::Vector2f birdPos = m_body.getPosition();
-	for(int i = 1; i < t_playerScent.size(); i++)
+	for(int i = t_playerScent.size() - 1; i >= 0; i--)
 	{
 		if (t_playerScent.at(i).m_circle.getGlobalBounds().findIntersection(m_visionCone.getBounds()))
 		{
@@ -167,6 +228,7 @@ void Bird::collisionVisionConeScent(std::vector<Scent> &t_playerScent)
 			m_chasingPoint = t_playerScent.at(i).m_circle.getPosition();
 			m_movingFrom = m_body.getPosition();
 			m_chasing = true;
+			m_returning = false;
 			return;
 		}
 	}
@@ -188,6 +250,26 @@ sf::Angle Bird::lookAt(sf::Vector2f t_pointToLookAt)
 		return m_body.getRotation();
 	}
 	return angle;
+}
+
+bool Bird::collisionVisionConeTurtle(sf::Sprite& t_turtle)
+{
+	if (m_visionCone.getBounds().findIntersection(t_turtle.getGlobalBounds()))
+	{
+		m_state = BirdState::ATTACKING;
+		m_chasingPoint = t_turtle.getPosition();
+		m_movingFrom = m_body.getPosition();
+		m_chasing = true;
+		m_returning = false;
+		m_killTimer.start();
+		return true;
+	}
+	return false;
+}
+
+bool Bird::isPlayerDead()
+{
+	return m_playerDead;
 }
 
 

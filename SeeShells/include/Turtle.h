@@ -29,11 +29,11 @@ private:
 
 	sf::Angle m_rotation{sf::degrees(0.0f)};
 
+	bool m_isHiding = false;
+
 public:
 
 	Turtle(AssetManager &t_assetManager);
-
-	//void init();
 	void update(float t_dt);
 	void render(sf::RenderWindow& t_window);
 	void manageScent();
@@ -44,6 +44,7 @@ public:
 	void increaseRotation();
 	void decreaseSpeed();
 	void decreaseRotation();
+	bool isPlayerHiding();
 
 };
 

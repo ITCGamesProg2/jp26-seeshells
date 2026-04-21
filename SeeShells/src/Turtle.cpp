@@ -148,3 +148,8 @@ void Turtle::decreaseRotation()
 	}
 }
 
+bool Turtle::isPlayerHiding()
+{
+	return m_isHiding;
+}
+

@@ -125,6 +125,11 @@ void Game::processKeyPressed(const std::optional<sf::Event>& t_event)
 ////////////////////////////////////////////////////////////
 void Game::update(double dt)
 {
+	std::vector<int> vector;
+	vector.push_back(1);
+	vector.push_back(2);
+	vector.push_back(3);
+	vector.push_back(4);
 	switch (m_state)
 	{
 	case GameState::START:
@@ -160,12 +165,12 @@ void Game::update(double dt)
 		m_turtle.update(dt);
 
 		m_crab.update(dt);
-		m_bird.update(dt, m_turtle.getScent());
+		m_bird.update(dt, m_turtle.getScent(), m_turtle.getSprite(), m_turtle.isPlayerHiding());
 
 		updateSpatialMap();
 		checkCollision();
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R))
+		if (m_bird.isPlayerDead())
 		{
 			m_state = GameState::END;
 		}

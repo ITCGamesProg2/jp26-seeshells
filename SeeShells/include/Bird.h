@@ -17,12 +17,14 @@ class Bird
 {
 public:
 	Bird(AssetManager& t_assetManager, sf::Vector2f pos);
-	void update(float dt, std::vector<Scent> &t_playerScent);
+	void update(float dt, std::vector<Scent>& t_playerScent, sf::Sprite& t_turtle, bool t_isHiding);
 	void render(sf::RenderWindow& t_window);
 	void visionCone();
 	void move(float dt);
 	void collisionVisionConeScent(std::vector<Scent> &t_playerScent);
 	sf::Angle lookAt(sf::Vector2f  t_pointToLookAt);
+	bool collisionVisionConeTurtle(sf::Sprite& t_turtle);
+	bool isPlayerDead();
 	
 private:
 	sf::Sprite m_body;
@@ -41,10 +43,14 @@ private:
 	sf::Vector2f m_movingFrom;
 	bool m_chasing = false;
 	bool m_returning = false;
+	sf::Clock m_killTimer;
+	bool m_sawPlayer = false;
+	bool m_playerDead = false;
 
 	float m_diffUpdating;
 	Animation m_moveAnimation;
 	Animation* m_currAnimation;
+
 };
 
 #include "Turtle.h"
