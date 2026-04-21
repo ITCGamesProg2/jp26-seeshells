@@ -75,7 +75,10 @@ void Turtle::move(float t_dt)
 	else if (m_direction.x != 0 || m_direction.y != 0)
 	{
 		notifyAll(Event::MOVE);
+		rotate();
 	}
+	
+
 	
 
 	sf::Vector2f pos = m_body.getPosition();
@@ -83,6 +86,21 @@ void Turtle::move(float t_dt)
 	pos.y += m_direction.y * m_speed * (t_dt/1000);
 
 	m_body.setPosition(pos);
+}
+
+void Turtle::rotate()
+{
+	float currentHeading = m_body.getRotation().asDegrees();
+	sf::Vector2 pos = m_body.getPosition();
+
+
+	pos += m_direction;
+	float distance = sqrt((pos.x * pos.x) + (pos.y * pos.y));
+
+	m_body.setRotation(m_direction.angle());
+
+
+	
 }
 
 void Turtle::render(sf::RenderWindow& t_window)

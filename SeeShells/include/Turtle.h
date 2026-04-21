@@ -37,6 +37,7 @@ public:
 
 	//void init();
 	void update(float t_dt);
+	void rotate();
 
 	void render(sf::RenderWindow& t_window);
 
