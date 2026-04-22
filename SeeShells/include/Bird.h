@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
 #include "Animation.h"
-#include "Creature.h"
+#include "Drawable.h"
 
 struct Scent;
 enum class BirdState
@@ -14,12 +14,12 @@ enum class BirdState
 	ATTACKING
 };
 
-class Bird
+class Bird : public Drawable
 {
 public:
 	Bird(AssetManager& t_assetManager, sf::Vector2f pos);
 	void update(float dt, std::vector<Scent>& t_playerScent, sf::Sprite& t_turtle, bool t_isHiding);
-	void render(sf::RenderWindow& t_window);
+	void render(sf::RenderWindow& t_window) override;
 	void visionCone();
 	void move(float dt);
 	void collisionVisionConeScent(std::vector<Scent> &t_playerScent);

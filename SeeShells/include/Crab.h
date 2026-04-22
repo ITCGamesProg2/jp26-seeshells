@@ -3,9 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
 #include "Animation.h"
-#include "Creature.h"
+#include "Drawable.h"
 
-class Crab
+class Crab : public Drawable
 {
 private:
 
@@ -38,7 +38,7 @@ public:
 
 	void updateSpatialMap(std::map<int, std::list<sf::Sprite>>& t_spatialMap);
 
-	void render(sf::RenderWindow& t_window);
+	void render(sf::RenderWindow& t_window) override;
 
 	sf::Sprite getSprite();
 };

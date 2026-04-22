@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
+#include "Drawable.h"
 
 #include <map> 
 #include <list>
@@ -10,7 +11,7 @@
 
 
 
-class Environment
+class Environment : public Drawable
 {
 private:
 
@@ -49,7 +50,7 @@ public:
 	bool entityCollison(sf::Sprite t_entity);
 
 
-	void render(sf::RenderWindow& t_window);
+	void render(sf::RenderWindow& t_window) override;
 
 	std::vector<sf::Sprite>& getObstacles();
 

@@ -5,7 +5,7 @@
 #include "Animation.h"
 #include "Subject.h"
 #include "CollisionDetector.h"
-#include "Creature.h"
+#include "Drawable.h"
 
 struct Scent
 {
@@ -13,7 +13,7 @@ struct Scent
 	sf::Clock m_timer;
 };
 
-class Turtle : public Subject
+class Turtle : public Subject, public Drawable
 {
 private:
 
@@ -47,7 +47,7 @@ public:
 
 	void update(float t_dt);
 
-	void render(sf::RenderWindow& t_window);
+	void render(sf::RenderWindow& t_window) override;
 	void manageScent();
 	std::vector<Scent> getScent();
 	sf::Sprite getSprite();
