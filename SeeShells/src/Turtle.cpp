@@ -8,14 +8,8 @@ Turtle::Turtle(AssetManager &t_assetManager, std::vector<sf::Sprite>& t_obstacle
 {
 	m_body.setOrigin({ 16.0f,16.0f }); 
 
-	m_moveAnimation.addFrame(sf::IntRect({ 0,0 }, { 32,32 }));
-	m_moveAnimation.addFrame(sf::IntRect({ 32,0 }, { 32,32 }));
-	m_moveAnimation.addFrame(sf::IntRect({ 64,0 }, { 32,32 }));
-	m_moveAnimation.addFrame(sf::IntRect({ 96,0 }, { 32,32 }));
-	m_moveAnimation.addFrame(sf::IntRect({ 128,0 }, { 32,32 }));
-	m_moveAnimation.addFrame(sf::IntRect({ 160,0 }, { 32,32 }));
 
-	m_currAnimation = &m_moveAnimation;
+	initAnimation();
 }
 
 void Turtle::update(float t_dt)
@@ -90,7 +84,7 @@ void Turtle::deflect(float t_dt)
 
 void Turtle::move(float t_dt)
 {
-	handleKeyInput();
+	handleMoveInput();
 	m_speed = std::clamp(m_speed, -50.0f, 50.0f);
 	sf::Vector2f newPos;
 
@@ -143,7 +137,22 @@ sf::Sprite Turtle::getSprite()
 }
 
 
-void Turtle::handleKeyInput()
+void Turtle::handleHideInput()
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && m_animationState == AnimationState::MOVE)
+	{
+		m_animationState = AnimationState::SHELL_ON;
+		m_animationDelay.restart();
+	}
+	else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && m_animationState == AnimationState::HIDE)
+	{
+		m_animationState = AnimationState::SHELL_OFF;
+		m_animationDelay.restart();
+	}
+}
+
+
+void Turtle::handleMoveInput()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
 	{
@@ -216,4 +225,50 @@ bool Turtle::checkCollision()
 		}
 	}
 	return false;
+}
+
+void Turtle::processAnimation()
+{
+	switch (m_animationState)
+	{
+	case AnimationState::MOVE:
+		break;
+	case AnimationState::HIDE:
+		break;
+
+
+	case AnimationState::SHELL_ON:
+		if (m_animationDelay.getElapsedTime().asSeconds() > 1.0f)
+		{
+			m_animationState = AnimationState::HIDE;
+			m_animationDelay.stop();
+		}
+		break;
+	case AnimationState::SHELL_OFF:
+		if (m_animationDelay.getElapsedTime().asSeconds() > 1.0f)
+		{
+			m_animationState = AnimationState::MOVE;
+			m_animationDelay.stop();
+		}
+		break;
+
+	}
+}
+
+void Turtle::initAnimation()
+{
+	m_moveAnimation.addFrame(sf::IntRect({ 0,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 32,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 64,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 96,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 128,0 }, { 32,32 }));
+	m_moveAnimation.addFrame(sf::IntRect({ 160,0 }, { 32,32 }));
+
+
+	//Animation m_moveAnimation;
+	//Animation m_hideAnimation;
+	//Animation m_shellOnAnimation;
+	//Animation m_shellOfAnimation;
+
+	m_currAnimation = &m_moveAnimation;
 }

@@ -27,6 +27,9 @@ private:
 	sf::Clock m_scentTimer;
 
 	Animation m_moveAnimation;
+	Animation m_hideAnimation;
+	Animation m_shellOnAnimation;
+	Animation m_shellOfAnimation;
 	Animation* m_currAnimation;
 
 	sf::Angle m_rotation{sf::degrees(0.0f)};
@@ -38,8 +41,13 @@ private:
 public:
 
 	Turtle(AssetManager &t_assetManager, std::vector<sf::Sprite>& t_obstacleSprites);
+	
 	enum class CollisionState { NORMAL, COLLIDING };
 	CollisionState m_state{ CollisionState::NORMAL };
+
+	enum class AnimationState { MOVE, SHELL_ON, SHELL_OFF, HIDE };
+	AnimationState m_animationState{ AnimationState::MOVE };
+	sf::Clock m_animationDelay;
 
 	std::vector<sf::Sprite>& m_obstacleSprites;
 	sf::Vector2f m_contactNormal;
@@ -51,7 +59,8 @@ public:
 	void manageScent();
 	std::vector<Scent> getScent();
 	sf::Sprite getSprite();
-	void handleKeyInput();
+	void handleMoveInput();
+	void handleHideInput();
 	void increaseSpeed();
 	void increaseRotation();
 	void decreaseSpeed();
@@ -60,6 +69,9 @@ public:
 
 	bool checkCollision();
 	void deflect(float t_dt);
+
+	void processAnimation();
+	void initAnimation();
 
 };
 
