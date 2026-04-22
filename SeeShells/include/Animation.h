@@ -11,12 +11,15 @@ public:
 
 	void update();
 	sf::IntRect getCurrentFrame() const;
+	void resetCurrentFrame();
 
 	void setFrameTime(int time);
 	void setLooping(bool loop);
 	bool isAnimationFinished() const;
 
 private:
+	
+
 	std::vector<sf::IntRect> frames;
 	size_t currentFrame;
 	int frameTime;

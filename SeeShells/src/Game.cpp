@@ -225,7 +225,7 @@ void Game::checkCollision()
 	sf::Sprite playa = m_turtle.getSprite();
 	if (m_environment.entityCollison(playa))
 	{
-		std::cout << "Player collided with tile\n";
+		//std::cout << "Player collided with tile\n";
 		
 	}
 
@@ -237,7 +237,7 @@ void Game::checkCollision()
 	sf::Sprite crabby = m_crab.getSprite();
 	if (m_environment.entityCollison(crabby))
 	{
-		std::cout << "crabby collided with tile\n";
+		//std::cout << "crabby collided with tile\n";
 	}
 }
 

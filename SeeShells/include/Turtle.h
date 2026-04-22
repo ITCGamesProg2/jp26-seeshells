@@ -29,7 +29,7 @@ private:
 	Animation m_moveAnimation;
 	Animation m_hideAnimation;
 	Animation m_shellOnAnimation;
-	Animation m_shellOfAnimation;
+	Animation m_shellOffAnimation;
 	Animation* m_currAnimation;
 
 	sf::Angle m_rotation{sf::degrees(0.0f)};

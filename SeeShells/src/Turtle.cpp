@@ -35,7 +35,10 @@ void Turtle::update(float t_dt)
 		m_state = CollisionState::NORMAL;
 	}
 	
-	
+
+	handleHideInput();
+	processAnimation();
+
 
 	for (int i = 0; i < m_scentTrail.size(); i++)
 	{
@@ -143,11 +146,16 @@ void Turtle::handleHideInput()
 	{
 		m_animationState = AnimationState::SHELL_ON;
 		m_animationDelay.restart();
+		m_currAnimation->resetCurrentFrame();
+		m_currAnimation = &m_shellOnAnimation;
+
 	}
 	else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && m_animationState == AnimationState::HIDE)
 	{
 		m_animationState = AnimationState::SHELL_OFF;
 		m_animationDelay.restart();
+		m_currAnimation->resetCurrentFrame();
+		m_currAnimation = &m_shellOffAnimation;
 	}
 }
 
@@ -232,23 +240,31 @@ void Turtle::processAnimation()
 	switch (m_animationState)
 	{
 	case AnimationState::MOVE:
+		std::cout << "moving\n";
 		break;
 	case AnimationState::HIDE:
+		std::cout << "hiding\n";
 		break;
 
 
 	case AnimationState::SHELL_ON:
+		std::cout << "shelloning\n";
 		if (m_animationDelay.getElapsedTime().asSeconds() > 1.0f)
 		{
 			m_animationState = AnimationState::HIDE;
 			m_animationDelay.stop();
+			m_currAnimation->resetCurrentFrame();
+			m_currAnimation = &m_hideAnimation;
 		}
 		break;
 	case AnimationState::SHELL_OFF:
+		std::cout << "shelloffing\n";
 		if (m_animationDelay.getElapsedTime().asSeconds() > 1.0f)
 		{
 			m_animationState = AnimationState::MOVE;
 			m_animationDelay.stop();
+			m_currAnimation->resetCurrentFrame();
+			m_currAnimation = &m_moveAnimation;
 		}
 		break;
 
@@ -265,10 +281,30 @@ void Turtle::initAnimation()
 	m_moveAnimation.addFrame(sf::IntRect({ 160,0 }, { 32,32 }));
 
 
-	//Animation m_moveAnimation;
-	//Animation m_hideAnimation;
-	//Animation m_shellOnAnimation;
-	//Animation m_shellOfAnimation;
+	m_hideAnimation.addFrame(sf::IntRect({ 160, 32 }, { 32,32 }));
+	m_hideAnimation.addFrame(sf::IntRect({ 192, 32 }, { 32,32 }));
+	m_hideAnimation.setFrameTime(50);
+
+	m_shellOnAnimation.addFrame(sf::IntRect({ 0, 32 }, { 32,32 }));
+	m_shellOnAnimation.addFrame(sf::IntRect({ 32, 32 }, { 32,32 }));
+	m_shellOnAnimation.addFrame(sf::IntRect({ 64, 32 }, { 32,32 }));
+	m_shellOnAnimation.addFrame(sf::IntRect({ 96, 32 }, { 32,32 }));
+	m_shellOnAnimation.addFrame(sf::IntRect({ 128, 32 }, { 32,32 }));
+	m_shellOnAnimation.addFrame(sf::IntRect({ 160, 32 }, { 32,32 }));
+	m_shellOnAnimation.addFrame(sf::IntRect({ 192, 32 }, { 32,32 }));
+	m_shellOnAnimation.setLooping(false);
+	m_shellOnAnimation.setFrameTime(12);
+
+
+	m_shellOffAnimation.addFrame(sf::IntRect({ 192, 32 }, { 32,32 }));
+	m_shellOffAnimation.addFrame(sf::IntRect({ 160, 32 }, { 32,32 }));
+	m_shellOffAnimation.addFrame(sf::IntRect({ 128, 32 }, { 32,32 }));
+	m_shellOffAnimation.addFrame(sf::IntRect({ 96, 32 }, { 32,32 }));
+	m_shellOffAnimation.addFrame(sf::IntRect({ 64, 32 }, { 32,32 }));
+	m_shellOffAnimation.addFrame(sf::IntRect({ 32, 32 }, { 32,32 }));
+	m_shellOffAnimation.addFrame(sf::IntRect({ 0, 32 }, { 32,32 }));
+	m_shellOffAnimation.setLooping(false);
+	m_shellOffAnimation.setFrameTime(12);
 
 	m_currAnimation = &m_moveAnimation;
 }

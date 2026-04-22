@@ -48,7 +48,6 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\OrientedBoundingBox.cpp" />
-    <ClCompile Include="src\Subject.cpp" />
     <ClCompile Include="src\Turtle.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

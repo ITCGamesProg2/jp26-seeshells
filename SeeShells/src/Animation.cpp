@@ -19,6 +19,7 @@ void Animation::update()
 		if (!looping && currentFrame == frames.size() - 1) {
 			// Stop at the last frame if not looping
 			isFinished = true;
+			resetCurrentFrame();
 		}
 	}
 }
@@ -27,6 +28,11 @@ sf::IntRect Animation::getCurrentFrame() const
 {
 	if (frames.empty()) return sf::IntRect();
 	return frames[currentFrame];
+}
+
+void Animation::resetCurrentFrame()
+{
+	currentFrame = 0;
 }
 
 void Animation::setFrameTime(int time) 
