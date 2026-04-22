@@ -21,6 +21,13 @@ void Crab::update(float t_dt)
 	m_currAnimation->update();
 }
 
+void Crab::changeDirection()
+{
+	m_goingLeft = !m_goingLeft;
+	m_moveDelay = 5;
+	m_moveTimer.restart();
+}
+
 void Crab::updateSpatialMap(std::map<int, std::list<sf::Sprite>>& t_spatialMap)
 {
 	float posX = m_body.getPosition().x;

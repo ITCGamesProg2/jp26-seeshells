@@ -35,6 +35,7 @@ public:
 	Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t_spatialMap);
 
 	void update(float t_dt);
+	void changeDirection();
 
 	void updateSpatialMap(std::map<int, std::list<sf::Sprite>>& t_spatialMap);
 

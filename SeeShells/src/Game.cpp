@@ -232,6 +232,12 @@ void Game::checkCollision()
 		m_state = GameState::END;
 		m_turtle.notifyAll(Event::DIE);
 	}
+
+	sf::Sprite crabby = m_crab.getSprite();
+	if (m_environment.entityCollison(crabby))
+	{
+		m_crab.changeDirection();
+	}
 }
 
 bool Game::entityCollision()
