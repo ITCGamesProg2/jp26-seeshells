@@ -10,6 +10,7 @@
 #pragma warning( disable : 4275 )
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <string>
 #include <map> 
 #include <list>
@@ -141,6 +142,7 @@ protected:
 	sf::Keyboard::Key lastPressed{ -1 };
 
 	AudioSystem m_audioSystem;
+	sf::Music m_music{ "resources/AUDIOS/music.wav" };
 
 #ifdef TEST_FPS
 	sf::Text x_updateFPS{ m_arialFont };	// text used to display updates per second.

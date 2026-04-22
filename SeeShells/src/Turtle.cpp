@@ -270,6 +270,7 @@ void Turtle::processAnimation()
 			m_animationDelay.stop();
 			m_currAnimation->resetCurrentFrame();
 			m_currAnimation = &m_moveAnimation;
+			notifyAll(Event::MOVE);
 		}
 		break;
 

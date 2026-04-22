@@ -27,6 +27,7 @@ void Game::init()
 	m_environment.generateObstacles();
 
 	m_turtle.addObserver(&m_audioSystem);
+	m_music.setLooping(true);
 
 #ifdef TEST_FPS
 	x_updateFPS.setFont(m_arialFont);
@@ -156,6 +157,7 @@ void Game::update(double dt)
 			if (lastPressed == sf::Keyboard::Key::A)
 			{
 				m_state = GameState::PLAY;
+				m_music.play();
 			}
 		}
 		break;
@@ -173,6 +175,8 @@ void Game::update(double dt)
 		if (m_bird.isPlayerDead())
 		{
 			m_state = GameState::END;
+			m_turtle.notifyAll(Event::DIE);
+			m_music.stop();
 		}
 		break;
 
@@ -200,6 +204,7 @@ void Game::update(double dt)
 			if (lastPressed == sf::Keyboard::Key::A)
 			{
 				m_state = GameState::PLAY;
+				m_music.play();
 			}
 		}
 		break;
@@ -222,22 +227,10 @@ void Game::updateSpatialMap()
 ////////////////////////////////////////////////////////////
 void Game::checkCollision()
 {
-	sf::Sprite playa = m_turtle.getSprite();
-	if (m_environment.entityCollison(playa))
-	{
-		//std::cout << "Player collided with tile\n";
-		
-	}
-
 	if (entityCollision())
 	{
+		m_state = GameState::END;
 		m_turtle.notifyAll(Event::DIE);
-	}
-
-	sf::Sprite crabby = m_crab.getSprite();
-	if (m_environment.entityCollison(crabby))
-	{
-		//std::cout << "crabby collided with tile\n";
 	}
 }
 

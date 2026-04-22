@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="include\Animation.h" />
     <ClInclude Include="include\AssetManager.h" />
+    <ClInclude Include="include\AudioPlayer.h" />
     <ClInclude Include="include\AudioSystem.h" />
     <ClInclude Include="include\Bird.h" />
     <ClInclude Include="include\CollisionDetector.h" />
@@ -39,6 +40,7 @@
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\AssetManager.cpp" />
+    <ClCompile Include="src\AudioPlayer.cpp" />
     <ClCompile Include="src\AudioSystem.cpp" />
     <ClCompile Include="src\Bird.cpp" />
     <ClCompile Include="src\CollisionDetector.cpp" />
