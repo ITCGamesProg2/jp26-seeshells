@@ -5,6 +5,7 @@
 #include "Animation.h"
 #include "Subject.h"
 #include "CollisionDetector.h"
+#include "Creature.h"
 
 struct Scent
 {

@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
 #include "Animation.h"
-
+#include "Creature.h"
 
 class Crab
 {
