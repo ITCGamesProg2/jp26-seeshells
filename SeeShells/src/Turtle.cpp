@@ -7,8 +7,6 @@ Turtle::Turtle(AssetManager &t_assetManager, std::vector<sf::Sprite>& t_obstacle
 	m_obstacleSprites(t_obstacleSprites)
 {
 	m_body.setOrigin({ 16.0f,16.0f }); 
-
-
 	initAnimation();
 }
 
@@ -50,22 +48,28 @@ void Turtle::update(float t_dt)
 		}
 	}
 
-
-	if (m_state == CollisionState::NORMAL)
+	if (!m_isHiding)
 	{
-		move(t_dt);
-		m_currAnimation->update();
-	}
-	else if (m_state == CollisionState::COLLIDING)
-	{
-		deflect(t_dt);
-
-		if (m_speed < 0.1)
+		if (m_state == CollisionState::NORMAL)
 		{
 			move(t_dt);
 			m_currAnimation->update();
 		}
-	}	
+		else if (m_state == CollisionState::COLLIDING)
+		{
+			deflect(t_dt);
+
+			if (m_speed < 0.1)
+			{
+				move(t_dt);
+				m_currAnimation->update();
+			}
+		}
+	}
+	else
+	{
+		m_currAnimation->update();
+	}
 }
 
 void Turtle::deflect(float t_dt)
@@ -148,7 +152,7 @@ void Turtle::handleHideInput()
 		m_animationDelay.restart();
 		m_currAnimation->resetCurrentFrame();
 		m_currAnimation = &m_shellOnAnimation;
-
+		m_isHiding = true;
 	}
 	else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && m_animationState == AnimationState::HIDE)
 	{
@@ -156,6 +160,7 @@ void Turtle::handleHideInput()
 		m_animationDelay.restart();
 		m_currAnimation->resetCurrentFrame();
 		m_currAnimation = &m_shellOffAnimation;
+		m_isHiding = false;
 	}
 }
 

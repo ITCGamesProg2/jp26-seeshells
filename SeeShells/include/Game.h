@@ -138,7 +138,7 @@ protected:
 	Bird m_bird;
 
 	GameState m_state = GameState::START;
-	sf::Keyboard::Key lastPressed;
+	sf::Keyboard::Key lastPressed{ -1 };
 
 	AudioSystem m_audioSystem;
 
