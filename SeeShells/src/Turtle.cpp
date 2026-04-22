@@ -1,9 +1,10 @@
 #include "Turtle.h"
 #include <iostream>
 
-Turtle::Turtle(AssetManager &t_assetManager)
+Turtle::Turtle(AssetManager &t_assetManager, std::vector<sf::Sprite>& t_obstacleSprites)
 	: m_assetManager(t_assetManager), 
-	m_body(t_assetManager.getTexture("player"))
+	m_body(t_assetManager.getTexture("player")),
+	m_obstacleSprites(t_obstacleSprites)
 {
 	m_body.setOrigin({ 16.0f,16.0f }); 
 
@@ -19,7 +20,6 @@ Turtle::Turtle(AssetManager &t_assetManager)
 
 void Turtle::update(float t_dt)
 {
-	handleKeyInput();
 	if (m_scentTrail.size() == 0.0f)
 	{
 		manageScent();
@@ -30,6 +30,18 @@ void Turtle::update(float t_dt)
 		manageScent();
 
 	}
+	
+	
+	if (checkCollision())
+	{
+		m_state = CollisionState::COLLIDING;
+	}
+	else
+	{
+		m_state = CollisionState::NORMAL;
+	}
+	
+	
 
 	for (int i = 0; i < m_scentTrail.size(); i++)
 	{
@@ -40,6 +52,45 @@ void Turtle::update(float t_dt)
 			m_scentTrail.pop_back();
 		}
 	}
+
+
+	if (m_state == CollisionState::NORMAL)
+	{
+		move(t_dt);
+		m_currAnimation->update();
+	}
+	else if (m_state == CollisionState::COLLIDING)
+	{
+		deflect(t_dt);
+
+		if (m_speed < 0.1)
+		{
+			move(t_dt);
+			m_currAnimation->update();
+		}
+	}	
+}
+
+void Turtle::deflect(float t_dt)
+{
+	// Calculate impulse based on speed
+
+	float impulseMagnitude = std::abs(m_speed);
+	// Normalise the contact vector
+	m_contactNormal = m_contactNormal.normalized();
+	// Calculate deflection amount
+	sf::Vector2f deflectVector =
+	{
+		impulseMagnitude * m_contactNormal.x * (static_cast<float>(t_dt) / 1000),
+		impulseMagnitude * m_contactNormal.y * (static_cast<float>(t_dt) / 1000)
+	};
+	// Apply impulse along the contact normal
+	m_body.move({ deflectVector.x, deflectVector.y });
+}
+
+void Turtle::move(float t_dt)
+{
+	handleKeyInput();
 	m_speed = std::clamp(m_speed, -50.0f, 50.0f);
 	sf::Vector2f newPos;
 
@@ -48,7 +99,6 @@ void Turtle::update(float t_dt)
 	m_body.setPosition(newPos);
 	m_body.setRotation(m_rotation);
 	m_speed *= 0.99;
-	m_currAnimation->update();
 }
 
 void Turtle::render(sf::RenderWindow& t_window)
@@ -91,6 +141,7 @@ sf::Sprite Turtle::getSprite()
 {
 	return m_body;
 }
+
 
 void Turtle::handleKeyInput()
 {
@@ -153,3 +204,16 @@ bool Turtle::isPlayerHiding()
 	return m_isHiding;
 }
 
+bool Turtle::checkCollision()
+{
+	for (sf::Sprite const& sprite : m_obstacleSprites)
+	{
+		if (CollisionDetector::collision(m_body, sprite))
+		{
+			// Get contact normal vector between tank base and the wall
+			m_contactNormal = m_body.getPosition() - sprite.getPosition();
+			return true;
+		}
+	}
+	return false;
+}
