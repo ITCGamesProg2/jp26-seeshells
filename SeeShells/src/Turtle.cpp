@@ -128,7 +128,7 @@ void Turtle::manageScent()
 	circle.setRadius(25.0f);
 	circle.setPosition(m_body.getPosition());
 	circle.setOrigin(m_body.getOrigin());
-	circle.setFillColor(sf::Color::Blue);
+	circle.setFillColor(sf::Color(152,110,82,80));
 
 	scent.m_circle = circle;
 	scent.m_timer.start();
