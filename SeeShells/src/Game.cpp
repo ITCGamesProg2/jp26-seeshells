@@ -172,6 +172,7 @@ void Game::update(double dt)
 		if (m_turtle.getWin())
 		{
 			m_state = GameState::WIN;
+			m_turtle.notifyAll(Event::WIN);
 			m_music.stop();
 		}
 

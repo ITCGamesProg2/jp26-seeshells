@@ -9,3 +9,8 @@ void ScreamAudio::play()
 {
 	m_screamSound.play();
 }
+
+void WinAudio::play()
+{
+	m_winSound.play();
+}

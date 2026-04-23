@@ -29,3 +29,13 @@ private:
 	sf::SoundBuffer m_screamBuffer{ "resources/AUDIOS/scream.wav" };
 	sf::Sound m_screamSound{ m_screamBuffer };
 };
+
+class WinAudio : public Audio
+	// Specific behaviour of low level module
+{
+public:
+	void play() override;
+private:
+	sf::SoundBuffer m_winBuffer{ "resources/AUDIOS/win.wav" };
+	sf::Sound m_winSound{ m_winBuffer };
+};

@@ -13,5 +13,9 @@ void AudioSystem::update(Event t_event)
 		m_audio = new ScreamAudio;
 		m_audio->play();
 		break;
+	case Event::WIN:
+		m_audio = new WinAudio;
+		m_audio->play();
+		break;
 	}
 }
