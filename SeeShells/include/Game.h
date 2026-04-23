@@ -156,6 +156,8 @@ protected:
 	AudioSystem m_audioSystem;
 	sf::Music m_music{ "resources/AUDIOS/music.wav" };
 
+	float m_timer = 60.0f;
+
 #ifdef TEST_FPS
 	sf::Text x_updateFPS{ m_arialFont };	// text used to display updates per second.
 	sf::Text x_drawFPS{ m_arialFont };		// text used to display draw calls per second.

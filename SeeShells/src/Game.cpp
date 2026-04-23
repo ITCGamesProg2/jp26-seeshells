@@ -161,6 +161,19 @@ void Game::update(double dt)
 		break;
 
 	case GameState::PLAY:
+		if (m_timer >= 0.0f)
+		{
+			m_timer -= dt / 1000;
+		}
+		else
+		{
+			m_state = GameState::LOSE;
+		}
+		if (m_turtle.getWin())
+		{
+			m_state = GameState::WIN;
+			m_music.stop();
+		}
 
 		m_turtle.update(dt);
 
@@ -330,6 +343,10 @@ void Game::render()
 		m_window.draw(text2);
 		break;
 	case GameState::PLAY:
+		text1.setString(std::to_string(static_cast<int>(m_timer)));
+		text1.setCharacterSize(100);
+		text1.setFillColor(sf::Color(117, 184, 79));
+		text1.setPosition({ 1350.0f,10.0f });
 		m_window.draw(m_background);
 		m_turtle.render(m_window);
 		for (int i = 0; i < m_crabs.size(); i++)
@@ -342,6 +359,7 @@ void Game::render()
 		}
 
 		m_environment.render(m_window);
+		m_window.draw(text1);
 		break;
 	case GameState::WIN:
 	case GameState::LOSE:
@@ -379,6 +397,7 @@ void Game::render()
 
 void Game::reset()
 {
+	m_timer = 60.0f;
 	m_birds.clear();
 	m_crabs.clear();
 
