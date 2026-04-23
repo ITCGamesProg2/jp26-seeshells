@@ -10,7 +10,6 @@ Bird::Bird(AssetManager& t_assetManager, sf::Vector2f t_pos):
 	m_body.setOrigin({ 16.0f,16.0f });
 	m_angle = 0.0f;
 	//m_diffUpdating = 10000;
-
 	m_moveAnimation.addFrame(sf::IntRect({ 0,0 }, { 32,32 }));
 	m_moveAnimation.addFrame(sf::IntRect({ 32,0 }, { 32,32 }));
 	m_moveAnimation.addFrame(sf::IntRect({ 64,0 }, { 32,32 }));

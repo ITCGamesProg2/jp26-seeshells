@@ -118,7 +118,14 @@ protected:
 	/// <param name="t_event">key pressed event</param>
 	void processKeyPressed(const std::optional<sf::Event>& t_event);
 
+	/// <summary>
+	/// Resets game
+	/// </summary>
 	void reset();
+
+	/// <summary>
+	/// Spawns enemies
+	/// </summary>
 	void spawnEnemies();
 
 	static int const numCols{ 10 };
@@ -139,24 +146,24 @@ protected:
 
 	Environment m_environment;
 
-	Turtle m_turtle;
+	Turtle m_turtle; // Player 
 
-	const int NUM_OF_BIRDS = 3;
-	const int NUM_OF_CRABS = 5;
+	const int NUM_OF_BIRDS = 3; // NO of bird enemies
+	const int NUM_OF_CRABS = 5; // NO of turtle enemies
 
-	std::vector<Bird> m_birds;
-	std::vector<Crab> m_crabs;
+	std::vector<Bird> m_birds; // Vector with birds
+	std::vector<Crab> m_crabs; // Vector with crabs
 
-	sf::Texture m_backgroundT{"resources/IMAGES/background.png"};
-	sf::Sprite m_background;
+	sf::Texture m_backgroundT{"resources/IMAGES/background.png"}; // Background texture
+	sf::Sprite m_background; // Background sprite
 
-	GameState m_state = GameState::START;
-	sf::Keyboard::Key lastPressed{ -1 };
+	GameState m_state = GameState::START; // Game state
+	sf::Keyboard::Key lastPressed{ -1 }; // Tracks last pressed key
 
 	AudioSystem m_audioSystem;
 	sf::Music m_music{ "resources/AUDIOS/music.wav" };
 
-	float m_timer = 60.0f;
+	float m_timer = 60.0f; // Timer
 
 #ifdef TEST_FPS
 	sf::Text x_updateFPS{ m_arialFont };	// text used to display updates per second.

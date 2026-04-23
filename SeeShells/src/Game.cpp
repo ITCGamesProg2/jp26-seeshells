@@ -132,6 +132,7 @@ void Game::update(double dt)
 	switch (m_state)
 	{
 	case GameState::START:
+		// If player types PLAY starts game
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
 		{
 			lastPressed = sf::Keyboard::Key::P;
@@ -161,6 +162,7 @@ void Game::update(double dt)
 		break;
 
 	case GameState::PLAY:
+		// Timer decreasing
 		if (m_timer >= 0.0f)
 		{
 			m_timer -= dt / 1000;
@@ -169,6 +171,8 @@ void Game::update(double dt)
 		{
 			m_state = GameState::LOSE;
 		}
+
+		//Checks for win
 		if (m_turtle.getWin())
 		{
 			m_state = GameState::WIN;
