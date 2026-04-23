@@ -36,11 +36,11 @@ void Game::init()
 	x_updateFPS.setFont(m_arialFont);
 	x_updateFPS.setPosition(sf::Vector2f{ 20.0f, 300.0f });
 	x_updateFPS.setCharacterSize(24);
-	x_updateFPS.setFillColor(sf::Color::White);
+	x_updateFPS.setFillColor(sf::Color::Black);
 	x_drawFPS.setFont(m_arialFont);
 	x_drawFPS.setPosition(sf::Vector2f{ 20.0f, 350.0f });
 	x_drawFPS.setCharacterSize(24);
-	x_drawFPS.setFillColor(sf::Color::White);
+	x_drawFPS.setFillColor(sf::Color::Black);
 #endif
 }
 
@@ -132,6 +132,7 @@ void Game::update(double dt)
 	switch (m_state)
 	{
 	case GameState::START:
+		// If player types PLAY starts game
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
 		{
 			lastPressed = sf::Keyboard::Key::P;
@@ -161,6 +162,7 @@ void Game::update(double dt)
 		break;
 
 	case GameState::PLAY:
+		// Timer decreasing
 		if (m_timer >= 0.0f)
 		{
 			m_timer -= dt / 1000;
@@ -169,6 +171,8 @@ void Game::update(double dt)
 		{
 			m_state = GameState::LOSE;
 		}
+
+		//Checks for win
 		if (m_turtle.getWin())
 		{
 			m_state = GameState::WIN;
