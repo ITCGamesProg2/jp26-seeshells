@@ -141,8 +141,8 @@ protected:
 
 	Turtle m_turtle;
 
-	const int NUM_OF_BIRDS = 2;
-	const int NUM_OF_CRABS = 4;
+	const int NUM_OF_BIRDS = 3;
+	const int NUM_OF_CRABS = 5;
 
 	std::vector<Bird> m_birds;
 	std::vector<Crab> m_crabs;

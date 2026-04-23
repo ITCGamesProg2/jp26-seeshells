@@ -420,13 +420,13 @@ void Game::spawnEnemies()
 	for (int i = 0; i < NUM_OF_BIRDS; i++)
 	{
 		float posx = rand() % 1050 + 150;
-		float posy = rand() % 750 + 150;
+		float posy = rand() % 700 + 100;
 		m_birds.emplace_back(m_assetManager, sf::Vector2f{ posx,posy });
 	}
 	for (int i = 0; i < NUM_OF_CRABS; i++)
 	{
 		float posx = rand() % 1050 + 150;
-		float posy = rand() % 750 + 150;
+		float posy = rand() % 700 + 100;
 		m_crabs.emplace_back(m_assetManager, m_spatialMap, sf::Vector2f{ posx,posy });
 	}
 }
