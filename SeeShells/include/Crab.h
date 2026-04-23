@@ -36,9 +36,18 @@ public:
 
 	Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t_spatialMap, sf::Vector2f t_pos);
 
+
 	void update(float t_dt);
+	/// <summary>
+	/// Swap the direction the crab is moving
+	/// </summary>
 	void changeDirection();
 
+	/// <summary>
+	/// Remove the old values of crab from the spatial grid 
+	/// and add values for current position
+	/// </summary>
+	/// <param name="t_spatialMap"></param>
 	void updateSpatialMap(std::map<int, std::list<sf::Sprite>>& t_spatialMap);
 
 	void render(sf::RenderWindow& t_window) override;

@@ -39,6 +39,7 @@ void Environment::generateObstacles()
 		}
 
 		
+		// Place the obstacles randomly in the beach (but not in extremities)
 		int allowedWidth = ScreenSize::s_width - 260;
 		int allowedHeight = ScreenSize::s_height - 100;
 		float offsetHeight = 50;
@@ -56,7 +57,7 @@ void Environment::generateObstacles()
 		int cellID_BR = floor((sprite.getPosition().x + sprite.getTexture().getSize().x) / cellWidth) +
 			(floor((sprite.getPosition().y + sprite.getTexture().getSize().y) / cellHeight) * numCols);
 
-		// Usage: insert a new map entry
+		// insert a new map entry
 		m_spatialMap[cellID_TL].push_back(sprite);
 		m_spatialMap[cellID_TR].push_back(sprite);
 		m_spatialMap[cellID_BL].push_back(sprite);
@@ -67,15 +68,22 @@ void Environment::generateObstacles()
 
 bool Environment::entityCollison(sf::Sprite t_entity)
 {
-	int cellID_TL = floor(t_entity.getPosition().x / cellWidth) +
-		(floor(t_entity.getPosition().y / cellHeight) * numCols);
-	int cellID_TR = floor((t_entity.getPosition().x + t_entity.getTexture().getSize().x) / cellWidth) +
-		(floor(t_entity.getPosition().y / cellHeight) * numCols);
-	int cellID_BL = floor(t_entity.getPosition().x / cellWidth) +
-		(floor((t_entity.getPosition().y + t_entity.getTexture().getSize().y) / cellHeight) * numCols);
-	int cellID_BR = floor((t_entity.getPosition().x + t_entity.getTexture().getSize().x) / cellWidth) +
-		(floor((t_entity.getPosition().y + t_entity.getTexture().getSize().y) / cellHeight) * numCols);
+	// Values needed to calculate position of all 4 corners of entity
+	float posX = t_entity.getPosition().x;
+	float posY = t_entity.getPosition().y;
+	float length = t_entity.getTextureRect().size.x;
+	float height = t_entity.getTextureRect().size.y;
 
+
+	// figuring out which cell each corner belongs to
+	int cellID_TL = floor(posX / cellWidth) + (floor(posY / cellHeight) * numCols);
+	int cellID_TR = floor((posX + length) / cellWidth) + (floor(posY / cellHeight) * numCols);
+	int cellID_BL = floor(posX / cellWidth) + (floor((posY + height) / cellHeight) * numCols);
+	int cellID_BR = floor((posX + length) / cellWidth) + (floor((posY + height) / cellHeight) * numCols);
+
+
+	// creating references to list of grid wehre entity's corners are located so 
+	// that we can check them to see if any obstacle located there
 	std::list<sf::Sprite>& entity_TL = m_spatialMap[cellID_TL];
 	std::list<sf::Sprite>& entity_TR = m_spatialMap[cellID_TR];
 	std::list<sf::Sprite>& entity_BL = m_spatialMap[cellID_BL];

@@ -54,6 +54,7 @@ void Turtle::update(float t_dt)
 	}
 
 	if (!m_isHiding)
+		// cannot move when hiding
 	{
 		if (m_state == CollisionState::NORMAL)
 		{
@@ -151,6 +152,7 @@ sf::Sprite Turtle::getSprite()
 
 void Turtle::handleHideInput()
 {
+	// Manage animation states based on whethe Space is pressed down currently or not and the present state 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && m_animationState == AnimationState::MOVE)
 	{
 		m_animationState = AnimationState::SHELL_ON;
@@ -249,16 +251,14 @@ void Turtle::processAnimation()
 {
 	switch (m_animationState)
 	{
+		// Not transition states so we don't have to worry about these
 	case AnimationState::MOVE:
-		std::cout << "moving\n";
-		break;
 	case AnimationState::HIDE:
-		std::cout << "hiding\n";
 		break;
 
 
+		// Is the transition over? If so, change state
 	case AnimationState::SHELL_ON:
-		std::cout << "shelloning\n";
 		if (m_animationDelay.getElapsedTime().asSeconds() > 1.0f)
 		{
 			m_animationState = AnimationState::HIDE;
@@ -268,7 +268,6 @@ void Turtle::processAnimation()
 		}
 		break;
 	case AnimationState::SHELL_OFF:
-		std::cout << "shelloffing\n";
 		if (m_animationDelay.getElapsedTime().asSeconds() > 1.0f)
 		{
 			m_animationState = AnimationState::MOVE;
@@ -278,12 +277,13 @@ void Turtle::processAnimation()
 			notifyAll(Event::MOVE);
 		}
 		break;
-
 	}
 }
 
 void Turtle::initAnimation()
 {
+	// Initializing/configuring animations for all states
+
 	m_moveAnimation.addFrame(sf::IntRect({ 0,0 }, { 32,32 }));
 	m_moveAnimation.addFrame(sf::IntRect({ 32,0 }, { 32,32 }));
 	m_moveAnimation.addFrame(sf::IntRect({ 64,0 }, { 32,32 }));

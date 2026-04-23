@@ -31,6 +31,7 @@ int main(int, char* argv[])
 {
 	srand(time(nullptr));
 
+	// Loading in all textures into the assetManager
 	AssetManager assetManager;
 	assetManager.loadTexture("tiles", "resources/IMAGES/tiles.png");
 	assetManager.loadTexture("player", "resources/IMAGES/Turtle.png");

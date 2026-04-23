@@ -7,6 +7,10 @@ class Animation
 public:
 	Animation();
 
+	/// <summary>
+	/// Add an IntRect corresponding to an animation frame
+	/// </summary>
+	/// <param name="frame"></param>
 	void addFrame(const sf::IntRect& frame);
 
 	void update();

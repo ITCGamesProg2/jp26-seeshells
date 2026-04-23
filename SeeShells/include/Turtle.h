@@ -73,7 +73,16 @@ public:
 	bool checkCollision();
 	void deflect(float t_dt);
 
+
+	/// <summary>
+	/// Handles intermediary transition 
+	/// states for animation (SHELL_ON and SHELL_OFF)
+	/// </summary>
 	void processAnimation();
+
+	/// <summary>
+	/// Initialize and configure all animation states
+	/// </summary>
 	void initAnimation();
 
 	void reset();

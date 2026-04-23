@@ -235,8 +235,10 @@ void Game::update(double dt)
 
 void Game::updateSpatialMap()
 {
+	// Wipe out the old Spatial Map
 	m_spatialMap.clear();
 
+	// Add in again all entities on ground (all them crabs)
 	for (int i = 0; i < m_crabs.size(); i++)
 	{
 		m_crabs.at(i).updateSpatialMap(m_spatialMap);
@@ -249,12 +251,14 @@ void Game::updateSpatialMap()
 void Game::checkCollision()
 {
 	if (entityCollision())
+		// Did player collide with any crabs?
 	{
 		m_state = GameState::LOSE;
 		m_turtle.notifyAll(Event::DIE);
 	}
 
 	for (int i = 0; i < m_crabs.size(); i++)
+		// Did any crab collide with obstacle?
 	{
 		sf::Sprite crabby = m_crabs.at(i).getSprite();
 		if (m_environment.entityCollison(crabby))
@@ -266,6 +270,7 @@ void Game::checkCollision()
 
 bool Game::entityCollision()
 {
+	// Checks collision between player and other entities on the ground (all them Crabs)
 	sf::Sprite playa = m_turtle.getSprite();
 
 	float posX = playa.getPosition().x;
@@ -348,6 +353,11 @@ void Game::render()
 		text1.setCharacterSize(100);
 		text1.setFillColor(sf::Color(117, 184, 79));
 		text1.setPosition({ 1350.0f,10.0f });
+
+		text2.setString("Hold SPACE to hide!");
+		text2.setPosition({ ScreenSize::s_width/2 - 250.0f,  5});
+		text2.setCharacterSize(50);
+		text2.setFillColor(sf::Color::Black);
 		m_window.draw(m_background);
 		m_environment.render(m_window);
 		m_turtle.render(m_window);
@@ -362,6 +372,7 @@ void Game::render()
 
 		
 		m_window.draw(text1);
+		m_window.draw(text2);
 		break;
 	case GameState::WIN:
 	case GameState::LOSE:
@@ -399,7 +410,7 @@ void Game::render()
 
 void Game::reset()
 {
-	m_timer = 60.0f;
+	m_timer = 90.0f;
 	m_birds.clear();
 	m_crabs.clear();
 

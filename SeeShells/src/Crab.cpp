@@ -18,6 +18,8 @@ Crab::Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t
 void Crab::update(float t_dt)
 {
 	move(t_dt);
+
+	// updaye the animation
 	m_currAnimation->update();
 }
 
@@ -30,18 +32,20 @@ void Crab::changeDirection()
 
 void Crab::updateSpatialMap(std::map<int, std::list<sf::Sprite>>& t_spatialMap)
 {
+	// Values needed to calculate position of all 4 corners of sprite
 	float posX = m_body.getPosition().x;
 	float posY = m_body.getPosition().y;
 	float length = m_body.getTextureRect().size.x;
 	float height = m_body.getTextureRect().size.y;
 
 
+	// figuring out which cell each corner belongs to
 	int cellID_TL = floor(posX / cellWidth) + (floor(posY / cellHeight) * numCols);
 	int cellID_TR = floor((posX + length) / cellWidth) + (floor(posY / cellHeight) * numCols);
 	int cellID_BL = floor(posX / cellWidth) + (floor((posY + height) / cellHeight) * numCols);
 	int cellID_BR = floor((posX + length) / cellWidth) + (floor((posY + height) / cellHeight) * numCols);
 
-	// Usage: insert a new map entry
+	// insert a new map entry
 	t_spatialMap[cellID_TL].push_back(m_body);
 	t_spatialMap[cellID_TR].push_back(m_body);
 	t_spatialMap[cellID_BL].push_back(m_body);
@@ -51,6 +55,7 @@ void Crab::updateSpatialMap(std::map<int, std::list<sf::Sprite>>& t_spatialMap)
 void Crab::move(float t_dt)
 {
 	if (m_body.getPosition().x > 1185)
+		// Making sure crab doesn't go drown in sea
 	{
 		m_goingLeft = true;
 		m_moveDelay = rand() % 10;
@@ -58,6 +63,7 @@ void Crab::move(float t_dt)
 	}
 
 	if (m_moveTimer.getElapsedTime().asSeconds() > m_moveDelay)
+		// changing movement dir on timer for dynamic feel
 	{
 		m_moveDelay = rand() % 10;
 		m_moveTimer.restart();
@@ -65,6 +71,7 @@ void Crab::move(float t_dt)
 	}
 
 
+	// Updating the posiition
 	sf::Vector2f pos = m_body.getPosition();
 	if (m_goingLeft)
 	{
