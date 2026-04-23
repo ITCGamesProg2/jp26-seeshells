@@ -2,7 +2,7 @@
 
 Crab::Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t_spatialMap,sf::Vector2f t_pos)
 	: m_assetManager(t_assetManager),
-	m_body(t_assetManager.getTexture("crab")), m_moveDelay(5)
+	m_body(t_assetManager.getTexture("crab")), m_moveDelay(rand() % 10)
 {
 	m_body.setPosition(t_pos);
 	updateSpatialMap(t_spatialMap);
@@ -24,7 +24,7 @@ void Crab::update(float t_dt)
 void Crab::changeDirection()
 {
 	m_goingLeft = !m_goingLeft;
-	m_moveDelay = 5;
+	m_moveDelay = rand() % 10;
 	m_moveTimer.restart();
 }
 
@@ -50,9 +50,16 @@ void Crab::updateSpatialMap(std::map<int, std::list<sf::Sprite>>& t_spatialMap)
 
 void Crab::move(float t_dt)
 {
+	if (m_body.getPosition().x > 1185)
+	{
+		m_goingLeft = true;
+		m_moveDelay = rand() % 10;
+		m_moveTimer.restart();
+	}
+
 	if (m_moveTimer.getElapsedTime().asSeconds() > m_moveDelay)
 	{
-		m_moveDelay = 5;
+		m_moveDelay = rand() % 10;
 		m_moveTimer.restart();
 		m_goingLeft = !m_goingLeft;
 	}

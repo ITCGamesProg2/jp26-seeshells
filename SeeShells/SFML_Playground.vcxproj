@@ -45,7 +45,6 @@
     <ClCompile Include="src\Bird.cpp" />
     <ClCompile Include="src\CollisionDetector.cpp" />
     <ClCompile Include="src\Crab.cpp" />
-    <ClCompile Include="src\Drawable.cpp" />
     <ClCompile Include="src\Environment.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />

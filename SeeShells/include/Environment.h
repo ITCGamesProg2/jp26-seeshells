@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
 #include "Drawable.h"
+#include "ScreenSize.h"
 
 #include <map> 
 #include <list>

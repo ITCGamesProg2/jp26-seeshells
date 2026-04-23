@@ -39,7 +39,10 @@ void Environment::generateObstacles()
 		}
 
 		
-		sprite.setPosition({rand() % 1000 + 200.0f, rand()% 700 + 50.0f});
+		int allowedWidth = ScreenSize::s_width - 260;
+		int allowedHeight = ScreenSize::s_height - 100;
+		float offsetHeight = 50;
+		sprite.setPosition({float(rand() % allowedWidth), rand()% allowedHeight + offsetHeight});
 		m_obstacles.push_back(sprite);
 
 		//Update spatial Map with this entry of obstacle 
