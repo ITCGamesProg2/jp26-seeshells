@@ -6,14 +6,15 @@ static float const FPS{ 60.0f };
 
 ////////////////////////////////////////////////////////////
 Game::Game(AssetManager& t_assetManager)
-	: m_window(sf::VideoMode({ ScreenSize::s_width, ScreenSize::s_height }, 32), "SFML Playground", sf::Style::Default), 
-	m_turtle(t_assetManager, m_environment.getObstacles()), m_environment(t_assetManager)
+	: m_window(sf::VideoMode({ ScreenSize::s_width, ScreenSize::s_height }, 32), "SFML Playground", sf::Style::Default),
+	m_assetManager(t_assetManager),
+	m_turtle(m_assetManager, m_environment.getObstacles()), m_environment(m_assetManager),m_background(m_backgroundT)
 {
-	init(t_assetManager);
+	init();
 }
 
 ////////////////////////////////////////////////////////////
-void Game::init(AssetManager& t_assetManager)
+void Game::init()
 {
 	// Really only necessary is our target FPS is greater than 60.
 	m_window.setVerticalSyncEnabled(true);
@@ -22,26 +23,14 @@ void Game::init(AssetManager& t_assetManager)
 	{
 		std::cerr << "Error loading font file";
 	}
+	m_background.setPosition({ 0.0f,0.0f });
 
 	m_environment.generateObstacles();
 
 	m_turtle.addObserver(&m_audioSystem);
 	m_music.setLooping(true);
 
-	m_birds.reserve(2);
-	m_crabs.reserve(4);
-	for (int i = 0; i < 2; i++)
-	{
-		float posx = rand() % 800 + 200;
-		float posy = rand() % 700 + 100;
-		m_birds.emplace_back(t_assetManager, sf::Vector2f{ posx,posy });
-	}
-	for (int i = 0; i < 4; i++)
-	{
-		float posx = rand() % 800 + 200;
-		float posy = rand() % 700 + 100;
-		m_crabs.emplace_back(t_assetManager, m_spatialMap, sf::Vector2f{ posx,posy });
-	}
+	spawnEnemies();
 
 #ifdef TEST_FPS
 	x_updateFPS.setFont(m_arialFont);
@@ -185,7 +174,7 @@ void Game::update(double dt)
 
 			if (m_birds.at(i).isPlayerDead())
 			{
-				m_state = GameState::END;
+				m_state = GameState::LOSE;
 				m_turtle.notifyAll(Event::DIE);
 				m_music.stop();
 			}
@@ -195,7 +184,8 @@ void Game::update(double dt)
 		checkCollision();
 		break;
 
-	case GameState::END:
+	case GameState::WIN:
+	case GameState::LOSE:
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
 		{
 			lastPressed = sf::Keyboard::Key::P;
@@ -218,8 +208,7 @@ void Game::update(double dt)
 		{
 			if (lastPressed == sf::Keyboard::Key::A)
 			{
-				m_state = GameState::PLAY;
-				m_music.play();
+				reset();
 			}
 		}
 		break;
@@ -247,7 +236,7 @@ void Game::checkCollision()
 {
 	if (entityCollision())
 	{
-		m_state = GameState::END;
+		m_state = GameState::LOSE;
 		m_turtle.notifyAll(Event::DIE);
 	}
 
@@ -341,7 +330,7 @@ void Game::render()
 		m_window.draw(text2);
 		break;
 	case GameState::PLAY:
-
+		m_window.draw(m_background);
 		m_turtle.render(m_window);
 		for (int i = 0; i < m_crabs.size(); i++)
 		{
@@ -354,9 +343,17 @@ void Game::render()
 
 		m_environment.render(m_window);
 		break;
-	case GameState::END:
+	case GameState::WIN:
+	case GameState::LOSE:
 		m_window.clear(sf::Color(173, 216, 230, 255));
-		text1.setString("Gameover");
+		if (m_state == GameState::LOSE)
+		{
+			text1.setString("Gameover");
+		}
+		else
+		{
+			text1.setString("You won");
+		}
 		text1.setCharacterSize(200);
 		text1.setFillColor(sf::Color(117, 184, 79));
 		text1.setPosition({ 390.0f,180.0f });
@@ -378,6 +375,39 @@ void Game::render()
 	m_window.draw(x_drawFPS);
 #endif
 	m_window.display();
+}
+
+void Game::reset()
+{
+	m_birds.clear();
+	m_crabs.clear();
+
+	spawnEnemies();
+
+	m_turtle.reset();
+
+	m_state = GameState::PLAY;
+	m_music.stop();
+	m_music.play();
+
+}
+
+void Game::spawnEnemies()
+{
+	m_birds.reserve(NUM_OF_BIRDS);
+	m_crabs.reserve(NUM_OF_CRABS);
+	for (int i = 0; i < NUM_OF_BIRDS; i++)
+	{
+		float posx = rand() % 1050 + 150;
+		float posy = rand() % 750 + 150;
+		m_birds.emplace_back(m_assetManager, sf::Vector2f{ posx,posy });
+	}
+	for (int i = 0; i < NUM_OF_CRABS; i++)
+	{
+		float posx = rand() % 1050 + 150;
+		float posy = rand() % 750 + 150;
+		m_crabs.emplace_back(m_assetManager, m_spatialMap, sf::Vector2f{ posx,posy });
+	}
 }
 
 

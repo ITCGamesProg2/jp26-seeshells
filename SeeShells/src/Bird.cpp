@@ -26,10 +26,26 @@ Bird::Bird(AssetManager& t_assetManager, sf::Vector2f t_pos):
 }
 void Bird::update(float dt, std::vector<Scent> &t_playerScent, sf::Sprite& t_turtle, bool t_isHiding)
 {
+	if (m_ignoreScentTimer > 0.0f)
+	{
+		m_ignoreScentTimer -= dt / 1000.0f;
+	}
+	if (m_alertTimer > 0.0f)
+	{
+		m_alertTimer -= dt / 1000.0f;
+	}
 	switch (m_state)
 	{
 	case BirdState::SEARCHING:
 	case BirdState::ALERT:
+		if (m_alertTimer <= 0.0f)
+		{
+			m_state = BirdState::SEARCHING;
+		}
+		if(m_ignoreScentTimer <= 0.0f)
+		{
+			collisionVisionConeScent(t_playerScent);
+		}
 		collisionVisionConeScent(t_playerScent);
 		break;
 	case BirdState::PURSUING:
@@ -53,6 +69,7 @@ void Bird::update(float dt, std::vector<Scent> &t_playerScent, sf::Sprite& t_tur
 					{
 						m_killTimer.reset();
 						m_state = BirdState::ALERT;
+						m_alertTimer = 3.0f;
 					}
 				}
 			}
@@ -156,7 +173,7 @@ void Bird::move(float dt)
 	case BirdState::PURSUING:
 		
 		m_body.setRotation(lookAt(m_chasingPoint));
-		if (m_diffUpdating > m_speed / 2)
+		if (m_diffUpdating > 10.0f)
 		{
 			newPos.x = m_body.getPosition().x + (m_direction.x * m_speed * dt / 10);
 			newPos.y = m_body.getPosition().y + (m_direction.y * m_speed * dt / 10);
@@ -171,6 +188,8 @@ void Bird::move(float dt)
 			{
 				m_returning = false;
 				m_state = BirdState::ALERT;
+				m_alertTimer = 3.0f;
+				m_ignoreScentTimer = 2.0f;
 			}
 			if (m_chasing)
 			{
@@ -183,7 +202,7 @@ void Bird::move(float dt)
 		break;
 	case BirdState::ATTACKING:
 		m_body.setRotation(lookAt(m_chasingPoint));
-		if (m_diffUpdating > m_speed / 2)
+		if (m_diffUpdating > 10.0f)
 		{
 			newPos.x = m_body.getPosition().x + (m_direction.x * m_speed * dt / 10);
 			newPos.y = m_body.getPosition().y + (m_direction.y * m_speed * dt / 10);
@@ -198,6 +217,8 @@ void Bird::move(float dt)
 			{
 				m_returning = false;
 				m_state = BirdState::ALERT;
+				m_alertTimer = 3.0f;
+				m_ignoreScentTimer = 2.0f;
 			}
 			if (m_chasing)
 			{

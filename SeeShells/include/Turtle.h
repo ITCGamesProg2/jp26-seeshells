@@ -73,5 +73,7 @@ public:
 	void processAnimation();
 	void initAnimation();
 
+	void reset();
+
 };
 
