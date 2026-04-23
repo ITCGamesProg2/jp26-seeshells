@@ -114,13 +114,13 @@ void Bird::visionCone()
 		coneColor = sf::Color(255, 255, 0, 50);
 		break;
 	case BirdState::PURSUING:
-		addingToRotation = 0.0f;
+		addingToRotation = -270.0f;
 		m_angleOfFan = 25.0f;
 		m_reachOfFan = 125.0f;
 		coneColor = sf::Color(255, 165, 0, 50);
 		break;
 	case BirdState::ATTACKING:
-		addingToRotation = 0.0f;
+		addingToRotation = -270.0f;
 		m_angleOfFan = 15.0f;
 		m_reachOfFan = 150.0f;
 		coneColor = sf::Color(255, 0, 0, 50);
@@ -263,7 +263,7 @@ sf::Angle Bird::lookAt(sf::Vector2f t_pointToLookAt)
 	{
 		m_direction = m_direction.normalized();
 
-		angle = m_direction.angle();
+		angle = m_direction.angle() + sf::degrees(270.0f);
 	}
 	else
 	{
