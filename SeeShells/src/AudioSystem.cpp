@@ -6,10 +6,12 @@ void AudioSystem::update(Event t_event)
 	switch (t_event)
 	{
 	case Event::MOVE:
-		m_audioPlayer.playFootsteps();
+		m_audio = new FootstepAudio;
+		m_audio->play();
 		break;
 	case Event::DIE:
-		m_audioPlayer.playScream();
+		m_audio = new ScreamAudio;
+		m_audio->play();
 		break;
 	}
 }

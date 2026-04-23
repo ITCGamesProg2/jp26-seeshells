@@ -3,13 +3,11 @@
 #include "Observer.h"
 #include "Event.h"
 #include <iostream>
-#include "AudioPlayer.h"
+#include "Audio.h"
 
 class AudioSystem : public Observer {
 public:
-
 	void update(Event t_event) override;
-
 private:
-	AudioPlayer m_audioPlayer;
+	Audio *m_audio;
 };
