@@ -6,12 +6,17 @@ Turtle::Turtle(AssetManager &t_assetManager, std::vector<sf::Sprite>& t_obstacle
 	m_body(t_assetManager.getTexture("player")),
 	m_obstacleSprites(t_obstacleSprites)
 {
+	m_body.setPosition({ 10.0f,450.0f });
 	m_body.setOrigin({ 16.0f,16.0f }); 
+	m_winRect.setPosition({ 1265.0f,0.0f });
+	m_winRect.setSize({ 175.0f, 900.0f });
 	initAnimation();
 }
 
 void Turtle::update(float t_dt)
 {
+	checkWin();
+
 	if (m_scentTrail.size() == 0.0f)
 	{
 		manageScent();
@@ -313,4 +318,24 @@ void Turtle::initAnimation()
 	m_shellOffAnimation.setFrameTime(12);
 
 	m_currAnimation = &m_moveAnimation;
+}
+
+void Turtle::reset()
+{
+	m_body.setPosition({ 10.0f,450.0f });
+	m_body.setOrigin({ 16.0f,16.0f });
+	m_didWin = false;
+}
+
+void Turtle::checkWin()
+{
+	if (m_body.getGlobalBounds().findIntersection(m_winRect.getGlobalBounds()))
+	{
+		m_didWin = true;
+	}
+}
+
+bool Turtle::getWin()
+{
+	return m_didWin;
 }

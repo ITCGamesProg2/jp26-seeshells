@@ -47,6 +47,8 @@ private:
 	sf::Clock m_killTimer;
 	bool m_sawPlayer = false;
 	bool m_playerDead = false;
+	float m_ignoreScentTimer = 0.0f;
+	float m_alertTimer = 0.0f;
 
 	float m_diffUpdating;
 	Animation m_moveAnimation;

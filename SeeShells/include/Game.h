@@ -28,7 +28,8 @@ enum class GameState
 {
 	START,
 	PLAY,
-	END
+	WIN,
+	LOSE
 };
 
 /// <summary>
@@ -117,11 +118,15 @@ protected:
 	/// <param name="t_event">key pressed event</param>
 	void processKeyPressed(const std::optional<sf::Event>& t_event);
 
+	void reset();
+	void spawnEnemies();
+
 	static int const numCols{ 10 };
 	static int const numRows{ 10 };
 	static int const cellWidth{ 64 };
 	static int const cellHeight{ 64 };
 
+	AssetManager &m_assetManager;
 
 	// Need to #include <map> and #include <list>
 	// Declaration of std::map
@@ -135,14 +140,23 @@ protected:
 	Environment m_environment;
 
 	Turtle m_turtle;
-	Crab m_crab;
-	Bird m_bird;
+
+	const int NUM_OF_BIRDS = 2;
+	const int NUM_OF_CRABS = 4;
+
+	std::vector<Bird> m_birds;
+	std::vector<Crab> m_crabs;
+
+	sf::Texture m_backgroundT{"resources/IMAGES/background.png"};
+	sf::Sprite m_background;
 
 	GameState m_state = GameState::START;
 	sf::Keyboard::Key lastPressed{ -1 };
 
 	AudioSystem m_audioSystem;
 	sf::Music m_music{ "resources/AUDIOS/music.wav" };
+
+	float m_timer = 60.0f;
 
 #ifdef TEST_FPS
 	sf::Text x_updateFPS{ m_arialFont };	// text used to display updates per second.

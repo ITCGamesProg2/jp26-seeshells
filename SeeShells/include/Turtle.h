@@ -38,6 +38,9 @@ private:
 
 	void move(float t_dt);
 
+	sf::RectangleShape m_winRect;
+	bool m_didWin = false;
+
 public:
 
 	Turtle(AssetManager &t_assetManager, std::vector<sf::Sprite>& t_obstacleSprites);
@@ -72,6 +75,10 @@ public:
 
 	void processAnimation();
 	void initAnimation();
+
+	void reset();
+	void checkWin();
+	bool getWin();
 
 };
 
