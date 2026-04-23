@@ -7,7 +7,7 @@
 #include <map> 
 #include <list>
 
-#define MAX_OBSTACLES	20
+#define MAX_OBSTACLES	40
 
 
 

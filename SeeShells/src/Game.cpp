@@ -349,6 +349,7 @@ void Game::render()
 		text1.setFillColor(sf::Color(117, 184, 79));
 		text1.setPosition({ 1350.0f,10.0f });
 		m_window.draw(m_background);
+		m_environment.render(m_window);
 		m_turtle.render(m_window);
 		for (int i = 0; i < m_crabs.size(); i++)
 		{
@@ -359,7 +360,7 @@ void Game::render()
 			m_birds.at(i).render(m_window);
 		}
 
-		m_environment.render(m_window);
+		
 		m_window.draw(text1);
 		break;
 	case GameState::WIN:

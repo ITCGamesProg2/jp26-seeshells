@@ -24,7 +24,7 @@ void Environment::generateObstacles()
 		sf::Sprite sprite(texture);
 
 		// Randomly decide obstace type
-		int type = rand() % 4;
+		int type = rand() % 3;
 		switch (type)
 		{
 		case 0:
@@ -35,9 +35,6 @@ void Environment::generateObstacles()
 			break;
 		case 2:
 			sprite.setTextureRect(sf::IntRect({ 0,32 }, { 32,32 }));
-			break;
-		case 3:
-			sprite.setTextureRect(sf::IntRect({ 32,32 }, { 32,32 }));
 			break;
 		}
 
