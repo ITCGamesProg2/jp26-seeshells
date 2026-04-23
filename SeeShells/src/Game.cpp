@@ -7,14 +7,13 @@ static float const FPS{ 60.0f };
 ////////////////////////////////////////////////////////////
 Game::Game(AssetManager& t_assetManager)
 	: m_window(sf::VideoMode({ ScreenSize::s_width, ScreenSize::s_height }, 32), "SFML Playground", sf::Style::Default), 
-	m_bird(t_assetManager, {400.0f, 400.0f}),
-	m_turtle(t_assetManager, m_environment.getObstacles()), m_crab(t_assetManager, m_spatialMap), m_environment(t_assetManager)
+	m_turtle(t_assetManager, m_environment.getObstacles()), m_environment(t_assetManager)
 {
-	init();
+	init(t_assetManager);
 }
 
 ////////////////////////////////////////////////////////////
-void Game::init()
+void Game::init(AssetManager& t_assetManager)
 {
 	// Really only necessary is our target FPS is greater than 60.
 	m_window.setVerticalSyncEnabled(true);
@@ -28,6 +27,21 @@ void Game::init()
 
 	m_turtle.addObserver(&m_audioSystem);
 	m_music.setLooping(true);
+
+	m_birds.reserve(2);
+	m_crabs.reserve(4);
+	for (int i = 0; i < 2; i++)
+	{
+		float posx = rand() % 800 + 200;
+		float posy = rand() % 700 + 100;
+		m_birds.emplace_back(t_assetManager, sf::Vector2f{ posx,posy });
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		float posx = rand() % 800 + 200;
+		float posy = rand() % 700 + 100;
+		m_crabs.emplace_back(t_assetManager, m_spatialMap, sf::Vector2f{ posx,posy });
+	}
 
 #ifdef TEST_FPS
 	x_updateFPS.setFont(m_arialFont);
@@ -126,11 +140,6 @@ void Game::processKeyPressed(const std::optional<sf::Event>& t_event)
 ////////////////////////////////////////////////////////////
 void Game::update(double dt)
 {
-	std::vector<int> vector;
-	vector.push_back(1);
-	vector.push_back(2);
-	vector.push_back(3);
-	vector.push_back(4);
 	switch (m_state)
 	{
 	case GameState::START:
@@ -166,18 +175,24 @@ void Game::update(double dt)
 
 		m_turtle.update(dt);
 
-		m_crab.update(dt);
-		m_bird.update(dt, m_turtle.getScent(), m_turtle.getSprite(), m_turtle.isPlayerHiding());
+		for (int i = 0; i < m_crabs.size(); i++)
+		{
+			m_crabs.at(i).update(dt);
+		}
+		for (int i = 0; i < m_birds.size(); i++)
+		{
+			m_birds.at(i).update(dt, m_turtle.getScent(), m_turtle.getSprite(), m_turtle.isPlayerHiding());
+
+			if (m_birds.at(i).isPlayerDead())
+			{
+				m_state = GameState::END;
+				m_turtle.notifyAll(Event::DIE);
+				m_music.stop();
+			}
+		}
 
 		updateSpatialMap();
 		checkCollision();
-
-		if (m_bird.isPlayerDead())
-		{
-			m_state = GameState::END;
-			m_turtle.notifyAll(Event::DIE);
-			m_music.stop();
-		}
 		break;
 
 	case GameState::END:
@@ -219,7 +234,10 @@ void Game::updateSpatialMap()
 {
 	m_spatialMap.clear();
 
-	m_crab.updateSpatialMap(m_spatialMap);
+	for (int i = 0; i < m_crabs.size(); i++)
+	{
+		m_crabs.at(i).updateSpatialMap(m_spatialMap);
+	}
 }
 
 
@@ -233,10 +251,13 @@ void Game::checkCollision()
 		m_turtle.notifyAll(Event::DIE);
 	}
 
-	sf::Sprite crabby = m_crab.getSprite();
-	if (m_environment.entityCollison(crabby))
+	for (int i = 0; i < m_crabs.size(); i++)
 	{
-		m_crab.changeDirection();
+		sf::Sprite crabby = m_crabs.at(i).getSprite();
+		if (m_environment.entityCollison(crabby))
+		{
+			m_crabs.at(i).changeDirection();
+		}
 	}
 }
 
@@ -322,8 +343,14 @@ void Game::render()
 	case GameState::PLAY:
 
 		m_turtle.render(m_window);
-		m_crab.render(m_window);
-		m_bird.render(m_window);
+		for (int i = 0; i < m_crabs.size(); i++)
+		{
+			m_crabs.at(i).render(m_window);
+		}
+		for (int i = 0; i < m_birds.size(); i++)
+		{
+			m_birds.at(i).render(m_window);
+		}
 
 		m_environment.render(m_window);
 		break;

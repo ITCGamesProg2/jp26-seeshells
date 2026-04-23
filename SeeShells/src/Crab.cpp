@@ -1,10 +1,10 @@
 #include "Crab.h"
 
-Crab::Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t_spatialMap)
+Crab::Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t_spatialMap,sf::Vector2f t_pos)
 	: m_assetManager(t_assetManager),
 	m_body(t_assetManager.getTexture("crab")), m_moveDelay(5)
 {
-	m_body.setPosition({ 100,100 });
+	m_body.setPosition(t_pos);
 	updateSpatialMap(t_spatialMap);
 
 

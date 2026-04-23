@@ -30,9 +30,11 @@ private:
 	Animation m_moveAnimation;
 	Animation* m_currAnimation;
 
+	sf::Vector2f m_position;
+
 public:
 
-	Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t_spatialMap);
+	Crab(AssetManager& t_assetManager, std::map<int, std::list<sf::Sprite>>& t_spatialMap, sf::Vector2f t_pos);
 
 	void update(float t_dt);
 	void changeDirection();

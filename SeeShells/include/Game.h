@@ -72,7 +72,7 @@ protected:
 	/// <summary>
 	/// @brief Once-off game initialisation code
 	/// </summary>	
-	void init();
+	void init(AssetManager& t_assetManager);
 	/// <summary>
 	/// @brief Placeholder to perform updates to all game objects.
 	/// </summary>
@@ -135,8 +135,9 @@ protected:
 	Environment m_environment;
 
 	Turtle m_turtle;
-	Crab m_crab;
-	Bird m_bird;
+
+	std::vector<Bird> m_birds;
+	std::vector<Crab> m_crabs;
 
 	GameState m_state = GameState::START;
 	sf::Keyboard::Key lastPressed{ -1 };
