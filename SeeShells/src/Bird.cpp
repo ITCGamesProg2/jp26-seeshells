@@ -25,6 +25,10 @@ Bird::Bird(AssetManager& t_assetManager, sf::Vector2f t_pos):
 }
 void Bird::update(float dt, std::vector<Scent> &t_playerScent, sf::Sprite& t_turtle, bool t_isHiding)
 {
+	if (m_ignoreScentTimer > 0.0f)
+	{
+		m_ignoreScentTimer -= dt / 1000.0f;
+	}
 	if (m_alertTimer > 0.0f)
 	{
 		m_alertTimer -= dt / 1000.0f;
